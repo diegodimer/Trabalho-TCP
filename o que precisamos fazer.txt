@@ -1,0 +1,29 @@
+precisamos guardar sobre os livros: EM UMA CLASSE
+
+nome/titulo
+id?
+editora
+autor
+classificação
+ano
+status (se ta disponivel) (booleano?)
+resumo
+
+autor (?) EM CLASSE (?)
+nome
+id?
+
+classificação EM CLASSE (?)
+nome
+id?
+
+editora EM CLASSE(?)
+nome
+id
+
+===== pq eu nao sei se é em classe mesmo editora/classificação e autor?? =====
+pq eu nao sei como essas coisas vão ficar salvas, vai ocupar menos espaço ter sempre uma referencia pro mesmo autor, não vai dar merda de digitar errado e se usar banco de dados acho q tem como selecionar todos com base na foreign key?
+nao sei
+opinem pelo amor de deus
+a entrega é pro dia 17
+
