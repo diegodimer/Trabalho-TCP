@@ -1,0 +1,2 @@
+precisa colocar os getter e setters nas classes
+fazer métodos pra elas (eu nao sei quais socorro)
