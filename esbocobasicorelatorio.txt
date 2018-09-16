@@ -1,0 +1,7 @@
+Sistema de controle bibliotecário:
+-Possui vários títulos cada título tem uma ou mais editoras, um unico autor e possui uma ou várias categorias.
+-Exemplares: os títulos nao podem ser retirados por isso possuí-se vários exemplares fisícos para acesso e alguns
+titulos possuem até exemplares online.
+-Exemplar físico pode ser retirado para ler na biblioteca durante uma duração, alugado por um determinado tempo se
+disponível ou pode ser reservado.
+-Exemplares podem ser consultados, os onlines podem ser baixados.
