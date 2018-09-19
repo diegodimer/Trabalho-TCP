@@ -1,0 +1,22 @@
+Relatório de Técnicas de Construção de Programas Trabalho Final Etapa 1 
+Prof. Kazuki Yokoyama
+Nomes: Augusto Peiter, Diego Dimer, Eduardo Paim
+Nºs:287685, nrodecartaodiego, nrodecartaoeduardo
+
+	O trabalho se desenvolve em volta de um sistema de gerenciamento de banco de dados de uma biblioteca, a 
+arquitetura se desenvolverá em torno de várias funções comuns ao sistema de uma biblioteca com membros, similar ao
+funcionamento da biblioteca da UFRGS. O sistema será desenvolvido com as seguintes funcionalidades: criar conta,
+ login, o usuário poderá alugar livros, acessar sua conta e pagar multas, renovar as devoluções, visualizar os títulos
+retirados, verificar a disponibilidade de um livro, atraves de um funcionário da biblioteca é possível também 
+adicionar novos títulos, remover títulos velhos, atualizar algum livro, fazer reservas para um usuário, filtrar por
+um livro em específico, adicionar novos usuários e funcionários.
+	As funcionalidades podem ser divididas de acordo com suas soluções, as mais simples como criar usuário,
+login, podem ser implementadas com sistema de autenticação simples, é necessário também desenvolver uma forma de
+pagamento de multas, para alugar livros pode-se adicionar os exemplares em questão a lista de empréstimos do usuário,
+com suas respectivas datas de devolução, para renovar devoluções será feito um método que atualiza os tempos de
+devolução, e possivelmente um sistema de base de dados será utilizado para manter as funcionalidades de filtragem,
+ adição, remoção e atualização de títulos.
+	Planejamos incorporar as soluções acima através de um sistema com uma hierarquia simples de cima pra baixo
+ de administrador do banco de dados, funcionário da biblioteca e usuário. Para o desenvolvimento do trabalho, 
+pensamos em usar junto de Java, o Postgres para tentar implementar um sistema de gerenciamento de banco de dados e 
+para fazer a interface gráfica o uso do aplicativo Swing, e o Github para desenvolver uma forma de versionamento..
