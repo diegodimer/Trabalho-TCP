@@ -1,6 +1,7 @@
 package Biblioteca;
 import java.sql.*;
 
+
 public class Database {
 	private String usuario;
 	private String senha;
@@ -22,8 +23,32 @@ public class Database {
 		}
 	}
 
-	public Usuário findUser(String data1, String data2) {
-		return null;
+	public Usuario findUser(String nome, String senha) throws SQLException {
+		PreparedStatement st = conec.prepareStatement("SELECT * FROM Usuario WHERE nome= ? and senha= ?");
+		st.setString(1, nome);
+		st.setString(2, senha);
+		boolean UserFound = false;
+		Usuario user= new Usuario();
+		ResultSet rs = st.executeQuery();
+		while (rs.next())
+		{
+			user = new Usuario(rs.getString(2), rs.getString(3),rs.getString(4));
+			user.setDebito(rs.getInt(5));
+			user.setUserid(rs.getInt(1));
+			user.setADM(rs.getBoolean(6));
+		    
+		    UserFound = true;
+		}
+		rs.close();
+		st.close();
+		
+		if (UserFound)
+		{
+			return user;
+		}
+		else
+			throw new SQLException("Dois usuarios iguais!"); // é insconsistencia na BD, mas né.
+	
 	}
 
 	public boolean addTitulo(Titulo livro) {
@@ -38,12 +63,32 @@ public class Database {
 		return false;
 	}
 
-	public boolean addUser(Usuário user) {
-		return false;
+	public boolean addUser(Usuario user) {
+		try {
+			PreparedStatement st = conec.prepareStatement("INSERT INTO Usuario(nome,senha,email,debito,adm) VALUES (?, ?, ?, ?, ?)");
+			st.setString(1, user.getUsername());
+			st.setString(2, user.getPassword());
+			st.setString(3, user.getEmail());
+			st.setInt(4, 0);
+			st.setBoolean(5, false);
+			st.executeUpdate();
+			st.close();
+			return true;
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
 	}
 
-	public boolean atualizaUsuario(Usuário user) {
+	public boolean atualizaUsuario(Usuario user) {
 		return false;
 	}
+	
+	void closeDatabase() throws SQLException {
+		conec.close();
+	}
+	
 
 }

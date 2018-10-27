@@ -5,7 +5,7 @@ public class FuncionarioUI  {
 
 	private UsuarioUI usuarioUI;
 
-	public boolean fazeremprestimo(Titulo livro, Usuário user) {
+	public boolean fazeremprestimo(Titulo livro, Usuario user) {
 		return false;
 	}
 
@@ -21,7 +21,7 @@ public class FuncionarioUI  {
 		return false;
 	}
 
-	public boolean adicionarusuario(Usuário user) {
+	public boolean adicionarusuario(Usuario user) {
 		return false;
 	}
 
