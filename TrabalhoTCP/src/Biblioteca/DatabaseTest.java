@@ -2,6 +2,7 @@ package Biblioteca;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import org.junit.jupiter.api.AfterEach;
@@ -21,20 +22,28 @@ class DatabaseTest {
 	}
 
 	// comentem esse depois de fazer! a db só suporta um usuario de cada tipo.
-	@Test
+	//@Test
 	void testAddUser() {
 
-		//Usuario novo = new Usuario("Diego", "123", "diego.dimer@ufrgs.br");
-		//assertTrue(testeDB.addUser(novo));
+		//Usuario novo = new Usuario("Joao", "123", "blabla@ufrgs.br");
+	//	assertTrue(testeDB.addUser(novo));
 	}
 	
+	
+	
 	@Test
-	void testFindUser() throws SQLException {
-
-		Usuario testuser;
-		testuser = testeDB.findUser("Diego", "123");
-		assertEquals("Diego", testuser.getUsername());
-		assertTrue(testuser.isADM());
+	void testtornaUserAdm(){
+		testeDB.tornaUserAdm("Joao");
+		
 	}
 
+	@Test
+		void testFindUser() throws SQLException {
+			Usuario testuser;
+			testuser = testeDB.findUser("Joao", "123");
+			assertEquals("Joao", testuser.getUsername());
+			assertTrue(testuser.isADM());
+			
+		
+		}
 }

@@ -10,9 +10,9 @@ public class Database {
 	
 	// esse método construtor faz a conexão com o banco de dados. Até então eu fiz só printar se ta tudo ok
 	Database() {
-		url= "jdbc:postgresql://localhost:5432/biblioteca_TCP";
-		usuario= "postgres";
-		senha = "prosgres";
+		url= "jdbc:postgresql://ec2-107-21-98-165.compute-1.amazonaws.com:5432/d3bt62m75hbk3k";
+		usuario= "eiyrmkkfmwgvay";
+		senha = "314fa4d9877c8f5f19446f16ec2bbde64767e9e348d2eaa9851e87006959b978";
 		
 		try {
 			Class.forName("org.postgresql.Driver");
@@ -81,9 +81,23 @@ public class Database {
 			return false;
 		}
 	}
-
+	public void tornaUserAdm(String nomeAdm) {
+		try {
+			PreparedStatement st = conec.prepareStatement("UPDATE Usuario set adm='true' where nome= ?");
+			st.setString(1, nomeAdm);
+			st.executeUpdate();
+			st.close();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		
+	}
 	public boolean atualizaUsuario(Usuario user) {
 		return false;
+		
 	}
 	
 	void closeDatabase() throws SQLException {
