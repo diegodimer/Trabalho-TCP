@@ -47,7 +47,7 @@ public class Database {
 			return user;
 		}
 		else
-			throw new SQLException("Dois usuarios iguais!"); // é insconsistencia na BD, mas né.
+			throw new SQLException("Nome ou senha inválidos!"); // é insconsistencia na BD, mas né.
 	
 	}
 
