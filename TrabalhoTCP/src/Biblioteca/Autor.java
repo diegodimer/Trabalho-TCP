@@ -1,24 +1,31 @@
 package Biblioteca;
+
 public class Autor {
 
-	private char nome;
-
+	private String nome;
 	private int id;
-
-	public void setNome(char nome) {
-
+	
+	Autor(String nome){
+		this.nome = nome;
 	}
-
-	public char getNome() {
-		return 0;
+	
+	Autor(String nome, int id){
+		this.nome = nome;
+		this.id = id;
 	}
-
-	public void setId(int id) {
-
+	
+	public String getNome() {
+		return nome;
 	}
-
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
 	public int getId() {
-		return 0;
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
 	}
 
+	
 }

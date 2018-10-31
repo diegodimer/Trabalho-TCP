@@ -1,14 +1,17 @@
 package Biblioteca;
-public class ExemplarFisico implements Titulo {
 
-	private int num_disponiveis;
+public class ExemplarFisico extends Titulo {
 
-	public void setNum_disponiveis(int num_disponiveis) {
+	private int numDisponiveis;
 
+	public int getNumDisponiveis() {
+		return numDisponiveis;
 	}
 
-	public int getNum_disponiveis() {
-		return 0;
+	public void setNumDisponiveis(int numDisponiveis) {
+		this.numDisponiveis = numDisponiveis;
 	}
+
+	
 
 }

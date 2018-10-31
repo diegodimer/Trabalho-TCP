@@ -1,14 +1,35 @@
 package Biblioteca;
-public class ExemplarAlugado extends ExemplarAlugavel {
+public class ExemplarAlugado extends Titulo {
 
-	private int data_devolucao;
-
-	public void setData_devolucao(int data_devolucao) {
-
+	private String dataDevolucao;
+	private String dataEmprestimo;
+	
+	ExemplarAlugado(Titulo e){
+		super(e.getNome(), e.getIdTitulo());
+	}
+	
+	ExemplarAlugado(String nome, int id){
+		super();
+		this.setNome(nome);
+		this.setIdTitulo(id);
+	}
+	
+	public void setDataDevolucao(String dataDevolucao) {
+		this.dataDevolucao = dataDevolucao;
 	}
 
-	public int getData_devolucao() {
-		return 0;
+	public String getDataDevolucao() {
+		return dataDevolucao;
 	}
+
+	public String getDataEmprestimo() {
+		return dataEmprestimo;
+	}
+
+	public void setDataEmprestimo(String dataEmprestimo) {
+		this.dataEmprestimo = dataEmprestimo;
+	}
+	
+	
 
 }

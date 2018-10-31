@@ -1,18 +1,29 @@
 package Biblioteca;
 public class Aluguel {
 
-	private int tempo_emprestimo;
+	private ExemplarAlugado titulo;
+	private int tempoRestante;
 
 	public void devolucao() {
 
 	}
 
-	public void setTempo_emprestimo(int tempo_emprestimo) {
-
+	public int getTempoRestante() {
+		return tempoRestante;
 	}
 
-	public int getTempo_emprestimo() {
-		return 0;
+	public void setTempoRestante(int tempoRestante) {
+		this.tempoRestante = tempoRestante;
 	}
+
+	public ExemplarAlugado getTitulo() {
+		return titulo;
+	}
+
+	public void setTitulo(ExemplarAlugado titulo) {
+		this.titulo = titulo;
+	}
+	
+	
 
 }

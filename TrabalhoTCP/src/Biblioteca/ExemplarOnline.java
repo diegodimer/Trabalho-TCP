@@ -1,14 +1,18 @@
 package Biblioteca;
-public class ExemplarOnline implements Titulo {
 
-	private char link;
+public class ExemplarOnline extends Titulo {
 
-	public void setLink(char link) {
+	private String link;
 
+	public String getLink() {
+		return link;
 	}
 
-	public char getLink() {
-		return 0;
+	public void setLink(String link) {
+		this.link = link;
 	}
+
+	
+	
 
 }

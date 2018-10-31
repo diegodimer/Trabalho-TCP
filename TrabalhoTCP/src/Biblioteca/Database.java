@@ -26,11 +26,11 @@ public class Database {
 	public Usuario findUser(String nome, String senha) throws UsuarioNaoEncontradoException, DatabaseInoperanteException {
 		
 		PreparedStatement st;
+		boolean UserFound = false;
 		try {
 			st = conec.prepareStatement("SELECT * FROM Usuario WHERE nome= ? and senha= ?");
 			st.setString(1, nome);
 			st.setString(2, senha);
-			boolean UserFound = false;
 			Usuario user= new Usuario();
 			ResultSet rs = st.executeQuery();
 			while (rs.next())
@@ -90,6 +90,29 @@ public class Database {
 		
 		
 	}
+	public void listaAlgueisdoUsuario(Usuario user) throws DatabaseInoperanteException, SQLException {
+		try {
+			PreparedStatement st = conec.prepareStatement("SELECT nomet, idtitulo, nomeau, idau, ided, nomeed, datadevolucao, dataemprestimo "
+					+ " FROM AluguelAtivo JOIN Titulo ON(livro=idtitulo) JOIN usuario ON(usuario=idu) JOIN autor ON(autor=idau) JOIN editora ON (ided=editora) "
+					+ " WHERE idu = ?");
+			st.setInt(1, user.getUserid());
+			ResultSet rs = null;
+			rs = st.executeQuery();
+			while (rs.next())
+			{
+				ExemplarAlugado novo = new ExemplarAlugado(rs.getString(1), rs.getInt(2));
+				novo.setAutor(new Autor(rs.getString(3), rs.getInt(4)));
+				novo.setEditora(new Editora(rs.getString(6), rs.getInt(5)));
+				novo.setDataDevolucao(rs.getString(7));
+				novo.setDataEmprestimo(rs.getString(8));
+				user.adicionaNovoAluguel(novo); 
+			}
+		} catch (SQLException e) {
+			throw new DatabaseInoperanteException("Erro na database");
+		}
+	}
+	
+	
 	public boolean atualizaUsuario(Usuario user) {
 		return false;
 		

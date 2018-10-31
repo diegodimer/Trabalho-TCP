@@ -1,5 +1,6 @@
 package Biblioteca;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Usuario {
 
@@ -7,23 +8,13 @@ public class Usuario {
 	private String username;
 	private String password;
 	private int debito;
-	private ArrayList<Aluguel> alugueis;
+	private List<ExemplarAlugado> alugueis;
 	private String email;
-	private ExemplarAlugado exemplarAlugado;
-	private ExemplarAlugavel exemplarAlugavel;
 	private boolean isADM;
-
-	public Aluguel Aluga(ExemplarAlugavel livro) {
-		return null;
-	}
 
 	Usuario(){
 		
 	}
-	public void log_in() {
-
-	}
-
 	public void setUserid(int userid) {
 		this.userid = userid;
 	}
@@ -57,13 +48,6 @@ public class Usuario {
 		return this.debito;
 	}
 
-	public void setAlugueis(ArrayList<Aluguel> alugueis) {
-
-	}
-
-	public ArrayList<Aluguel> getAlugueis() {
-		return null;
-	}
 
 	public Usuario(String nome, String senha, String email) {
 		this.username = nome;
@@ -71,6 +55,7 @@ public class Usuario {
 		this.email = email;
 		this.debito = 0;
 		this.setADM(false);
+		this.alugueis=new ArrayList<>();
 	}
 
 	public void setEmail(String email) {
@@ -90,4 +75,15 @@ public class Usuario {
 		this.isADM = isADM;
 	}
 
+	public List<ExemplarAlugado> getAlugueis() {
+		return alugueis;
+	}
+
+	public void setAlugueis(List<ExemplarAlugado> alugueis) {
+		this.alugueis = alugueis;
+	}
+	
+	public void adicionaNovoAluguel(ExemplarAlugado aluguel) {
+		this.alugueis.add(aluguel);
+	}
 }

@@ -3,26 +3,28 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
-class DatabaseTest {
-	Database testeDB;
+public class DatabaseTest {
+	static Database testeDB;
 	
-	@BeforeEach
-	void setUpClass() throws Exception {
+	@BeforeClass
+	public static void setUpClass() throws Exception {
 		testeDB = new Database();
 	}
 
-	@AfterEach
-	void tearDownClass() throws Exception {
+	@AfterClass
+	public static void tearDownClass() throws Exception {
 		testeDB.closeDatabase();
 	}
 
 	// comentem esse depois de fazer! a db só suporta um usuario de cada tipo.
-	@Test
-	void testAddUser() {
+	//@Test
+	public void testAddUser() {
 		testeDB.criaTodasTabelas();
 		Usuario novo = new Usuario("Diego", "123", "diego.dimer@ufrgs.br");
 		assertTrue(testeDB.addUser(novo));
@@ -32,12 +34,12 @@ class DatabaseTest {
 	
 	
 	@Test
-	void testtornaUserAdm(){
+	public void testtornaUserAdm(){
 		testeDB.tornaUserAdm("Diego");
 	}
 
 	@Test
-		void testFindUserExistente(){
+	public void testFindUserExistente(){
 			Usuario testuser = null;
 			try {
 				testuser = testeDB.findUser("Diego", "123");
@@ -50,8 +52,22 @@ class DatabaseTest {
 		
 		}
 	
-	@Test
-		void testFindUserInexistente() {
-		Usuario usuarioTeste = null;
+	@Test(expected  = UsuarioNaoEncontradoException.class)
+	public void testFindUserInexistente() throws UsuarioNaoEncontradoException {
+		testeDB.findUser("Joao", "1234");
 	}
+
+
+	@Test
+	public void testListarAlugueis() throws DatabaseInoperanteException, UsuarioNaoEncontradoException {
+		Usuario Eu = testeDB.findUser("Diego", "123");
+		try {
+			testeDB.listaAlgueisdoUsuario(Eu);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		assertEquals((Eu.getAlugueis().get(0)).getNome(), "O Labirinto de Fogo");
+	}
+	
 }

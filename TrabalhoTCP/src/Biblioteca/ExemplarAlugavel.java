@@ -1,14 +1,17 @@
 package Biblioteca;
+
 public class ExemplarAlugavel extends ExemplarFisico {
 
-	private int tempo_locacao;
+	private int tempoLocacao;
 
-	public void setTempo_locacao(int tempo_locacao) {
-
+	public int getTempoLocacao() {
+		return tempoLocacao;
 	}
 
-	public int getTempo_locacao() {
-		return 0;
+	public void setTempoLocacao(int tempoLocacao) {
+		this.tempoLocacao = tempoLocacao;
 	}
 
+	
+	
 }
