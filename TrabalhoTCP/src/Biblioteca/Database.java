@@ -19,36 +19,80 @@ public class Database {
 			conec = DriverManager.getConnection(url, usuario, senha);
 			System.out.println("Conexão feita!");
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new DatabaseInoperanteException("Erro na abertura da database");
 		}
 	}
 
-	public Usuario findUser(String nome, String senha) throws SQLException {
-		PreparedStatement st = conec.prepareStatement("SELECT * FROM Usuario WHERE nome= ? and senha= ?");
-		st.setString(1, nome);
-		st.setString(2, senha);
-		boolean UserFound = false;
-		Usuario user= new Usuario();
-		ResultSet rs = st.executeQuery();
-		while (rs.next())
-		{
-			user = new Usuario(rs.getString(2), rs.getString(3),rs.getString(4));
-			user.setDebito(rs.getInt(5));
-			user.setUserid(rs.getInt(1));
-			user.setADM(rs.getBoolean(6));
-		    
-		    UserFound = true;
-		}
-		rs.close();
-		st.close();
+	public Usuario findUser(String nome, String senha) throws UsuarioNaoEncontradoException, DatabaseInoperanteException {
 		
-		if (UserFound)
-		{
-			return user;
+		PreparedStatement st;
+		try {
+			st = conec.prepareStatement("SELECT * FROM Usuario WHERE nome= ? and senha= ?");
+			st.setString(1, nome);
+			st.setString(2, senha);
+			boolean UserFound = false;
+			Usuario user= new Usuario();
+			ResultSet rs = st.executeQuery();
+			while (rs.next())
+			{
+				user = new Usuario(rs.getString(2), rs.getString(3),rs.getString(4));
+				user.setDebito(rs.getInt(5));
+				user.setUserid(rs.getInt(1));
+				user.setADM(rs.getBoolean(6));
+			    
+			    UserFound = true;
+			}
+			rs.close();
+			st.close();
+			
+			if (UserFound)
+			{
+				return user;
+			}
+			else
+				throw new UsuarioNaoEncontradoException("Usuario nao encontrado!"); // é insconsistencia na BD, mas né.
+		} catch (SQLException e) {
+			throw new DatabaseInoperanteException("Erro na database");
 		}
-		else
-			throw new SQLException("Nome ou senha inválidos!"); // é insconsistencia na BD, mas né.
+		
 	
+	}
+
+	public boolean addUser(Usuario user) throws DatabaseInoperanteException {
+		try {
+			PreparedStatement st = conec.prepareStatement("INSERT INTO Usuario(nome,senha,email,debito,adm) VALUES (?, ?, ?, ?, ?)");
+			st.setString(1, user.getUsername());
+			st.setString(2, user.getPassword());
+			st.setString(3, user.getEmail());
+			st.setInt(4, 0);
+			st.setBoolean(5, false);
+			st.executeUpdate();
+			st.close();
+			return true;
+		}
+		catch(Exception e)
+		{
+			throw new DatabaseInoperanteException("Erro na database");
+		}
+	}
+	
+	public void tornaUserAdm(String nomeAdm) throws DatabaseInoperanteException {
+		try {
+			PreparedStatement st = conec.prepareStatement("UPDATE Usuario set adm='true' where nome= ?");
+			st.setString(1, nomeAdm);
+			st.executeUpdate();
+			st.close();
+		}
+		catch(Exception e)
+		{
+			throw new DatabaseInoperanteException("Erro na database");
+		}
+		
+		
+	}
+	public boolean atualizaUsuario(Usuario user) {
+		return false;
+		
 	}
 
 	public boolean addTitulo(Titulo livro) {
@@ -63,46 +107,117 @@ public class Database {
 		return false;
 	}
 
-	public boolean addUser(Usuario user) {
-		try {
-			PreparedStatement st = conec.prepareStatement("INSERT INTO Usuario(nome,senha,email,debito,adm) VALUES (?, ?, ?, ?, ?)");
-			st.setString(1, user.getUsername());
-			st.setString(2, user.getPassword());
-			st.setString(3, user.getEmail());
-			st.setInt(4, 0);
-			st.setBoolean(5, false);
-			st.executeUpdate();
-			st.close();
-			return true;
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-			return false;
-		}
-	}
-	public void tornaUserAdm(String nomeAdm) {
-		try {
-			PreparedStatement st = conec.prepareStatement("UPDATE Usuario set adm='true' where nome= ?");
-			st.setString(1, nomeAdm);
-			st.executeUpdate();
-			st.close();
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		
-		
-	}
-	public boolean atualizaUsuario(Usuario user) {
-		return false;
-		
-	}
 	
 	void closeDatabase() throws SQLException {
 		conec.close();
 	}
-	
 
+
+	
+	
+	
+	
+	void criaTodasTabelas() {
+		try {
+		PreparedStatement st = conec.prepareStatement("create table Editora(\r\n" + 
+				"	nomeed varchar(30) not null,\r\n" + 
+				"	ided serial primary key,\r\n" + 
+				"	unique (nomeed, ided)\r\n" + 
+				");\r\n" + 
+				"");
+		PreparedStatement st2 = conec.prepareStatement("\r\n" + 
+				"create table Autor(\r\n" + 
+				"	nomeau varchar(70) not null,\r\n" + 
+				"	idau serial primary key,\r\n" + 
+				"	unique (nomeau, idau)\r\n" + 
+				");");
+		PreparedStatement st3 = conec.prepareStatement("\r\n" + 
+				"create table Categoria(\r\n" + 
+				"	nomeca varchar(30),\r\n" + 
+				"	idca serial primary key,\r\n" + 
+				"	unique (nomeca, idca)\r\n" + 
+				");\r\n" + 
+				"");
+		PreparedStatement st4 = conec.prepareStatement("create table Titulo(\r\n" + 
+				"	nomet varchar(90),\r\n" + 
+				"	autor integer references Autor\r\n" + 
+				"	on update cascade\r\n" + 
+				"	on delete cascade,\r\n" + 
+				"	editora integer references Editora\r\n" + 
+				"	on delete cascade\r\n" + 
+				"	on update cascade,\r\n" + 
+				"	idTitulo serial primary key,\r\n" + 
+				"	unique (nomet, autor, editora)\r\n" + 
+				");");
+		PreparedStatement st5 = conec.prepareStatement("create table CategoriaPorTitulo(\r\n" + 
+				"	livro integer references Titulo\r\n" + 
+				"	on update cascade\r\n" + 
+				"	on delete cascade,\r\n" + 
+				"	categoria integer references Categoria\r\n" + 
+				"	on update cascade\r\n" + 
+				"	on delete cascade,\r\n" + 
+				"	primary key(livro, categoria)\r\n" + 
+				");");
+		PreparedStatement st6 = conec.prepareStatement("\r\n" + 
+				"create table ExemplarFisico(\r\n" + 
+				"	livro integer references Titulo\r\n" + 
+				"	on update cascade\r\n" + 
+				"	on delete cascade,\r\n" + 
+				"	num_disponiveis integer not null,\r\n" + 
+				"	primary key (livro)\r\n" + 
+				");");
+		PreparedStatement st7 = conec.prepareStatement("\r\n" + 
+				"create table ExemplarOnline(\r\n" + 
+				"	livro integer references Titulo\r\n" + 
+				"	on update cascade\r\n" + 
+				"	on delete cascade,\r\n" + 
+				"	link varchar(30)\r\n" + 
+				");\r\n" + 
+				"");
+		PreparedStatement st8 = conec.prepareStatement("create table Usuario(\r\n" + 
+				"	idu serial primary key,\r\n" + 
+				"	nome varchar(30) not null unique,\r\n" + 
+				"	senha varchar(30) not null,\r\n" + 
+				"	email varchar(50) not null unique,\r\n" + 
+				"	debito integer not null,\r\n" + 
+				"	adm bool not null\r\n" + 
+				");");
+		PreparedStatement st9 = conec.prepareStatement("create table AluguelAtivo(\r\n" + 
+				"	livro integer references ExemplarFisico\r\n" + 
+				"	on update cascade \r\n" + 
+				"	on delete cascade,\r\n" + 
+				"	usuario integer references Usuario\r\n" + 
+				"	on update cascade\r\n" + 
+				"	on delete cascade,\r\n" + 
+				"	dataEmprestimo date not null,\r\n" + 
+				"	dataDevolucao date not null\r\n" + 
+				");");
+		PreparedStatement st10 = conec.prepareStatement("create table AluguelInativo(\r\n" + 
+				"	livro integer references ExemplarFisico \r\n" + 
+				"	on update cascade \r\n" + 
+				"	on delete cascade,\r\n" + 
+				"	usuario integer references Usuario\r\n" + 
+				"	on update cascade\r\n" + 
+				"	on delete cascade,\r\n" + 
+				"	dataEmprestimo date not null,\r\n" + 
+				"	dataDevolucao date not null\r\n" + 
+				");");
+		
+		st.executeUpdate();
+		st2.executeUpdate();
+		st3.executeUpdate();
+		st4.executeUpdate();
+		st5.executeUpdate();
+		st6.executeUpdate();
+		st7.executeUpdate();
+		st8.executeUpdate();
+		st9.executeUpdate();
+		st10.executeUpdate();
+		
+		st.close();
+		}
+		catch(Exception e) {
+			throw new DatabaseInoperanteException("Erro na criação das tabelas");
+		}
+	}
 }
