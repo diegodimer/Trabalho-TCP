@@ -3,6 +3,9 @@ public class Editora {
 
 	private String nome;
 	private int id;
+	Editora(){
+		
+	}
 	
 	Editora(String nome){
 		this.nome = nome;

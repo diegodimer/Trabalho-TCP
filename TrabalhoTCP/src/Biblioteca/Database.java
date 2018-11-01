@@ -112,6 +112,47 @@ public class Database {
 		}
 	}
 	
+	public boolean addEditora(Editora ed) throws DatabaseInoperanteException{
+		try {
+			PreparedStatement st = conec.prepareStatement("INSERT INTO Editora(nomeed) VALUES (?)");
+			st.setString(1, ed.getNome());
+			st.executeUpdate();
+			st.close();
+			return true;
+		}
+		catch(Exception e)
+		{
+			throw new DatabaseInoperanteException("Erro na database");
+		}
+	}
+	public Editora findEditora(String nome) throws EditoraNaoEncontradaException, DatabaseInoperanteException{
+		PreparedStatement st;
+		boolean UserFound = false;
+		try {
+			st = conec.prepareStatement("SELECT * FROM Editora WHERE nomeed= ?");
+			st.setString(1, nome);
+			Editora ed= new Editora();
+			ResultSet rs = st.executeQuery();
+			System.out.println("chegou aqui");
+			while (rs.next())
+			{
+				ed = new Editora(rs.getString(1), rs.getInt(2));
+			    
+			    UserFound = true;
+			}
+			rs.close();
+			st.close();
+			
+			if (UserFound)
+			{
+				return ed;
+			}
+			else
+				throw new EditoraNaoEncontradaException("Editora nao encontrada!"); //
+		} catch (SQLException e) {
+			throw new DatabaseInoperanteException("Erro na database");
+		}
+	}
 	
 	public boolean atualizaUsuario(Usuario user) {
 		return false;

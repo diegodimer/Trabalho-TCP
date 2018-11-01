@@ -56,7 +56,30 @@ public class DatabaseTest {
 	public void testFindUserInexistente() throws UsuarioNaoEncontradoException {
 		testeDB.findUser("Joao", "1234");
 	}
-
+	
+	
+	@Test
+	//comentei isso aqui para nao criar varias editoras iguais
+	public void testAddEditora() {
+	//	Editora novoEd = new Editora("Rocco");
+	//	assertTrue(testeDB.addEditora(novoEd));
+	}
+	@Test(expected = EditoraNaoEncontradaException.class)
+	public void testFindEditoraInexistente() throws EditoraNaoEncontradaException{
+		testeDB.findEditora("editoraimaginaria");
+	}
+	@Test
+	public void testFindEditoraExistente(){
+			Editora ed = null;
+			try {
+				ed = testeDB.findEditora("teste");
+			} catch (DatabaseInoperanteException | EditoraNaoEncontradaException e) {
+				fail("erro");
+			}
+			assertEquals(6, ed.getId());
+			
+		
+		}
 
 	@Test
 	public void testListarAlugueis() throws DatabaseInoperanteException, UsuarioNaoEncontradoException {
