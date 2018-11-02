@@ -133,7 +133,6 @@ public class Database {
 			st.setString(1, nome);
 			Editora ed= new Editora();
 			ResultSet rs = st.executeQuery();
-			System.out.println("chegou aqui");
 			while (rs.next())
 			{
 				ed = new Editora(rs.getString(1), rs.getInt(2));
@@ -154,17 +153,100 @@ public class Database {
 		}
 	}
 	
+	public boolean addCategoria(Categoria cat) throws DatabaseInoperanteException{
+		try {
+			PreparedStatement st = conec.prepareStatement("INSERT INTO categoria(nomeca) VALUES (?)");
+			st.setString(1, cat.getNome());
+			st.executeUpdate();
+			st.close();
+			return true;
+		}
+		catch(Exception e)
+		{
+			throw new DatabaseInoperanteException("Erro na database");
+		}
+	}
+	public Categoria findCategoria(String nome) throws CategoriaNaoEncontradaException, DatabaseInoperanteException{
+		PreparedStatement st;
+		boolean UserFound = false;
+		try {
+			st = conec.prepareStatement("SELECT * FROM categoria WHERE nomeca= ?");
+			st.setString(1, nome);
+			Categoria cat= new Categoria();
+			ResultSet rs = st.executeQuery();
+			while (rs.next())
+			{
+				cat = new Categoria(rs.getString(1), rs.getInt(2));
+			    
+			    UserFound = true;
+			}
+			rs.close();
+			st.close();
+			
+			if (UserFound)
+			{
+				return cat;
+			}
+			else
+				throw new CategoriaNaoEncontradaException("Categoria nao encontrada!"); //
+		} catch (SQLException e) {
+			throw new DatabaseInoperanteException("Erro na database");
+		}
+	}
+	
+	
 	public boolean atualizaUsuario(Usuario user) {
 		return false;
 		
 	}
 
 	public boolean addTitulo(Titulo livro) {
-		return false;
+		try {
+			PreparedStatement st = conec.prepareStatement("INSERT INTO titulo(nomet,autor,editora) VALUES (?, ?, ?)");
+			st.setString(1, livro.getNome());
+			
+			Autor autor = livro.getAutor();
+			st.setInt(2, autor.getId());
+			
+			Editora ed = livro.getEditora();	
+			st.setInt(3, ed.getId());
+			
+			st.executeUpdate();
+			st.close();
+			return true;
+		}
+		catch(Exception e)
+		{
+			throw new DatabaseInoperanteException("Erro na database, id do autor ou id da editora possivelmente errados");
+		}
 	}
 
-	public Titulo findTitulo(Titulo livro) {
-		return null;
+	public Titulo findTitulo(String nome) throws TituloNaoEncontradoException {
+		PreparedStatement st;
+		boolean UserFound = false;
+		try {
+			st = conec.prepareStatement("SELECT * FROM titulo JOIN autor ON (autor=idau) JOIN editora ON (editora = ided)  WHERE nomet= ?");
+			st.setString(1, nome);
+			Titulo titulo= new Titulo();
+			ResultSet rs = st.executeQuery();
+			while (rs.next())
+			{
+				titulo = new Titulo(rs.getString(1), new Autor(rs.getString(5),rs.getInt(6)), new Editora(rs.getString(7),rs.getInt(8)),rs.getInt(4));
+			    
+			    UserFound = true;
+			}
+			rs.close();
+			st.close();
+			
+			if (UserFound)
+			{
+				return titulo;
+			}
+			else
+				throw new TituloNaoEncontradoException("titulo nao encontrado!");
+		} catch (SQLException e) {
+			throw new DatabaseInoperanteException("Erro na database");
+		}
 	}
 
 	public boolean removeTitulo(Titulo livro) {

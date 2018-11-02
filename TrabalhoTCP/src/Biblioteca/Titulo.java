@@ -14,6 +14,18 @@ public class Titulo {
 		this.nome = nome;
 		this.idTitulo = idTitulo;
 	}
+	Titulo(String nome, Autor autor, Editora editora){
+		this.nome = nome;
+		this.autor = autor;
+		this.editora = editora;
+	}
+	Titulo(String nome, Autor autor, Editora editora, int id){
+		this.nome = nome;
+		this.autor = autor;
+		this.editora = editora;
+		this.idTitulo = id;
+	}
+	
 	public int getIdTitulo() {
 		return idTitulo;
 	}

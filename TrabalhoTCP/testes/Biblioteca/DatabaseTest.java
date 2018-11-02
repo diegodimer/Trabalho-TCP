@@ -77,9 +77,53 @@ public class DatabaseTest {
 				fail("erro");
 			}
 			assertEquals(6, ed.getId());
-			
-		
 		}
+	
+	@Test
+	public void testAddCategoria() {
+	//	Categoria cat = new Categoria("terror");
+	//	assertTrue(testeDB.addCategoria(cat));
+	}
+	@Test(expected = CategoriaNaoEncontradaException.class)
+	public void testFindCategoriaInexistente() throws CategoriaNaoEncontradaException{
+		testeDB.findCategoria("categoriaimaginaria");
+	}
+	@Test
+	public void testFindCategoriaExistente(){
+			Categoria cat = null;
+			try {
+				cat = testeDB.findCategoria("terror");
+			} catch (DatabaseInoperanteException | CategoriaNaoEncontradaException e) {
+				fail("erro");
+			}
+			assertEquals(5, cat.getId());
+		}
+	@Test 
+	public void testCriartitulo(){
+		Titulo titulo = new Titulo("harry potter and the economic fall of the soviet union",new Autor("J. K. Stalin",3),new Editora("Positivo",2));
+		Autor autor = titulo.getAutor();
+		Editora ed =titulo.getEditora();
+		System.out.println(titulo.getNome());
+		System.out.println(Integer.toString(autor.getId()));
+		System.out.println(Integer.toString(ed.getId()));
+	}
+	
+	@Test
+	public void testAddTitulo() {
+	//	Titulo titulo = new Titulo("harry potter and the economic fall of the soviet union",new Autor("J. K. Stalin",3),new Editora("Positivo",2));
+	//	assertTrue(testeDB.addTitulo(titulo));
+	}
+	@Test
+	public void testTituloExistente(){
+			Titulo titulo = null;
+			try {
+				titulo = testeDB.findTitulo("Eclipse");
+			} catch (DatabaseInoperanteException | TituloNaoEncontradoException e) {
+				fail("erro");
+			}
+			assertEquals(7, titulo.getIdTitulo());
+		}
+	
 
 	@Test
 	public void testListarAlugueis() throws DatabaseInoperanteException, UsuarioNaoEncontradoException {
