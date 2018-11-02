@@ -3,6 +3,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.util.ArrayList;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -135,6 +137,19 @@ public class DatabaseTest {
 			e.printStackTrace();
 		}
 		assertEquals((Eu.getAlugueis().get(0)).getNome(), "O Labirinto de Fogo");
+	}
+	
+	@Test
+	public void testListaExemplaresDisponiveis() throws DatabaseInoperanteException, UsuarioNaoEncontradoException {
+		try {
+			ArrayList<ExemplarFisico> lista = testeDB.listaExemplaresDisponiveis("La");
+			assertEquals((lista.get(0)).getNome(), "O Labirinto de Fogo");
+			System.out.println((lista.get(0)).getNome()+"  "+ (lista.get(0)).getNumDisponiveis());
+			System.out.println((lista.get(1)).getNome()+"  "+ (lista.get(1)).getNumDisponiveis());
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 }

@@ -1,5 +1,7 @@
 package Biblioteca;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Database {
@@ -72,7 +74,7 @@ public class Database {
 		}
 		catch(Exception e)
 		{
-			throw new DatabaseInoperanteException("Erro na database");
+			throw new DatabaseInoperanteException("Usuário já existente");
 		}
 	}
 	
@@ -111,6 +113,27 @@ public class Database {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
+	
+	public ArrayList<ExemplarFisico> listaExemplaresDisponiveis(String nome) throws DatabaseInoperanteException, SQLException {
+		try {
+			PreparedStatement st = conec.prepareStatement("SELECT nomet,nomeau,idau,nomeed,ided,idtitulo,num_disponiveis FROM Titulo JOIN autor ON(autor=idau) JOIN editora ON (ided=editora) JOIN exemplarfisico ON (livro = idtitulo) WHERE nomet LIKE ?");
+			st.setString(1,"%"+ nome+"%");
+			ResultSet rs = null;
+			rs = st.executeQuery();
+			ArrayList<ExemplarFisico> lista = new ArrayList<>();
+			while (rs.next())
+			{
+				lista.add(new ExemplarFisico(rs.getString(1), new Autor(rs.getString(2),rs.getInt(3)),new Editora(rs.getString(4),rs.getInt(5)),rs.getInt(6),rs.getInt(7)));
+ 
+			}
+			return lista;
+		} catch (SQLException e) {
+			throw new DatabaseInoperanteException("Erro na database");
+		}
+	}
+	
+	
+	
 	
 	public boolean addEditora(Editora ed) throws DatabaseInoperanteException{
 		try {
