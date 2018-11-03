@@ -67,14 +67,14 @@ public class UsuarioUI extends JFrame implements ActionListener {
 		}
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 474, 363);
+		setBounds(100, 100, 451, 357);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 241, 414, 72);
+		scrollPane.setBounds(10, 241, 425, 76);
 		contentPane.add(scrollPane);
 		
 		JPanel panelComAlugueis = new JPanel();
