@@ -132,7 +132,32 @@ public class Database {
 		}
 	}
 	
-	
+	public Autor findAutor(String nome) throws AutorNaoEncontradoException, DatabaseInoperanteException{
+		PreparedStatement st;
+		boolean autorFound = false;
+		try {
+			st = conec.prepareStatement("SELECT * FROM Autor WHERE nomeau= ?");
+			st.setString(1, nome);
+			Autor autor= new Autor();
+			ResultSet rs = st.executeQuery();
+			while (rs.next())
+			{
+				autor = new Autor(rs.getString(1), rs.getInt(2));
+			    autorFound = true;
+			}
+			rs.close();
+			st.close();
+			
+			if (autorFound)
+			{
+				return autor;
+			}
+			else
+				throw new AutorNaoEncontradoException("Autor não encontrada!"); //
+		} catch (SQLException e) {
+			throw new DatabaseInoperanteException("Erro na database");
+		}
+	}
 	
 	
 	public boolean addEditora(Editora ed) throws DatabaseInoperanteException{

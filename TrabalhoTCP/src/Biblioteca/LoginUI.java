@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -94,6 +95,8 @@ public class LoginUI extends JFrame implements ActionListener {
 		contentPane.add(btnCriarConta);
 		
 		btnLogin.addActionListener(this);
+		
+		  		
 	}
 	// esse método é as ações dos botões
 	public void actionPerformed(ActionEvent e) {
@@ -127,4 +130,7 @@ public class LoginUI extends JFrame implements ActionListener {
 			registrar.setVisible(true);
 		}
 	}
+
 }
+
+

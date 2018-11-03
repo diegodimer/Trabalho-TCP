@@ -4,11 +4,13 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
@@ -144,6 +146,38 @@ public class FuncionarioUI extends JFrame implements ActionListener {
 	private void adicionaTitulo() {
 		JOptionPane.showMessageDialog(null, "adiciona titulo");
 		
+		JTextField nomeField = new JTextField(5);
+	    JTextField autorField = new JTextField(5);
+	    JTextField editoraField = new JTextField(5);
+	    JPanel myPanel = new JPanel();
+	    myPanel.add(new JLabel("Nome:"));
+	    myPanel.add(nomeField);
+	    myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+	    myPanel.add(new JLabel("Autor:"));
+	    myPanel.add(autorField);
+	    myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+	    myPanel.add(new JLabel("Editora:"));
+	    myPanel.add(editoraField);
+	    
+
+	    int result = JOptionPane.showConfirmDialog(null, myPanel, "Por favor, entre com NOME, AUTOR e EDITORA", JOptionPane.OK_CANCEL_OPTION);
+	      if (result == JOptionPane.OK_OPTION) {
+	    	  try {
+	    		  Autor autorLivroAdicionado = dataBase.findAutor(autorField.getText());
+	    		  Editora editoraLivroAdicionado = dataBase.findEditora(editoraField.getText());
+	    		  
+	    		  Titulo tituloAdicionado = new Titulo(nomeField.getText(), autorLivroAdicionado, editoraLivroAdicionado);
+	    		  dataBase.addTitulo(tituloAdicionado);
+	    		  JOptionPane.showMessageDialog(null, "Livro adicionado com sucesso!");
+	    	  }
+	    	  catch(AutorNaoEncontradoException | EditoraNaoEncontradaException | DatabaseInoperanteException e1)
+	    	  {
+	    		  JOptionPane.showMessageDialog(null, e1.getMessage() + " Lembre que eu sou case sensitive!!!!");
+	    	  }
+	      }
+	      
+
+		
 	}
 	private void encontraCategoria() {
 		JOptionPane.showMessageDialog(null, "encontra categoria");
@@ -172,7 +206,7 @@ public class FuncionarioUI extends JFrame implements ActionListener {
 		}
 	}	
 	
-
+	
 		
 	
 }

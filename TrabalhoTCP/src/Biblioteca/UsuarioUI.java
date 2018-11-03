@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.sql.SQLException;
+import java.util.Iterator;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -50,6 +51,8 @@ public class UsuarioUI extends JFrame implements ActionListener {
 	private final ButtonGroup opcaoBusca = new ButtonGroup(); // grupo de botoes
 	private JRadioButton rdbtnEditora;
 	private JRadioButton rdbtnCategoria;
+	private JRadioButton rdbtnNome;
+	private JRadioButton rdbtnAutor;
 	
 	public UsuarioUI(Usuario user, Database dataBase) {
 		setResizable(false);
@@ -120,25 +123,30 @@ public class UsuarioUI extends JFrame implements ActionListener {
 		paneldaBusca.add(resultadoBusca);
 		
 		JLabel lblBuscarLivro = new JLabel("Buscar livro");
-		lblBuscarLivro.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblBuscarLivro.setBounds(27, 11, 73, 14);
+		lblBuscarLivro.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblBuscarLivro.setBounds(10, 9, 90, 19);
 		contentPane.add(lblBuscarLivro);
 		
 		conteudoBuscado = new JTextField();
-		conteudoBuscado.setBounds(10, 40, 125, 19);
+		conteudoBuscado.setBounds(110, 10, 212, 19);
 		contentPane.add(conteudoBuscado);
 		conteudoBuscado.setColumns(10);
 		
 		btnBuscar = new JButton("Buscar");
 		btnBuscar.addActionListener(this);
-		btnBuscar.setBounds(359, 30, 89, 23);
+		btnBuscar.setBounds(332, 31, 89, 23);
 		contentPane.add(btnBuscar);
 		
 		JPanel panelRadioButtons = new JPanel();
-		panelRadioButtons.setBounds(142, 30, 223, 29);
+		panelRadioButtons.setBounds(10, 31, 355, 23);
 		contentPane.add(panelRadioButtons);
 		
-		JRadioButton rdbtnAutor = new JRadioButton("Autor");
+		rdbtnNome = new JRadioButton("Nome");
+		opcaoBusca.add(rdbtnNome);
+		rdbtnNome.setHorizontalAlignment(SwingConstants.CENTER);
+		panelRadioButtons.add(rdbtnNome);
+		
+		rdbtnAutor = new JRadioButton("Autor");
 		rdbtnAutor.setMnemonic('0');
 		opcaoBusca.add(rdbtnAutor);
 		rdbtnAutor.setHorizontalAlignment(SwingConstants.CENTER);
@@ -159,14 +167,31 @@ public class UsuarioUI extends JFrame implements ActionListener {
 	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == btnBuscar) {
-			if(rdbtnEditora.isSelected()) {
+			if(rdbtnNome.isSelected()) {
+				StringBuilder str = new StringBuilder();
+				
+				try {
+				for (Iterator<ExemplarFisico> iterator = dataBase.listaExemplaresDisponiveis(conteudoBuscado.getText()).iterator(); iterator.hasNext();) {
+					ExemplarFisico exemplarFisico = iterator.next();
+					str.append("Nome: " + exemplarFisico.getNome() + "\n\tAutor: " + exemplarFisico.getAutor().getNome() + "\n\tEditora: " + exemplarFisico.getEditora().getNome() + "\n\tNº Disponiveis: " + exemplarFisico.getNumDisponiveis() +"\n\n");
+				}
+				resultadoBusca.setText(str.toString());
+				}
+				catch(SQLException e2) {
+					JOptionPane.showMessageDialog(null, e2.getMessage());
+				}
+				
+			}
+			else if(rdbtnEditora.isSelected()) {
 				
 			}
 			else if(rdbtnCategoria.isSelected()) {
 				
 			}
-			else { // é pra procurar o autor
-				
+			else if(rdbtnAutor.isSelected()){
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "Escolha um parametro para buscar!");
 			}
 		}
 	}
