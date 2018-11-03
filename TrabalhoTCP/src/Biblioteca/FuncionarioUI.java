@@ -24,13 +24,14 @@ public class FuncionarioUI extends JFrame implements ActionListener {
 	private JButton btnMakeAdm;
 	private JButton btnAdicionaEditora;
 	private JButton btnAdicionaCategoria;
-	private JButton btnEncontraCategoria;
 	private JButton btnAdicionaTitulo;
 	private JButton btnAdicionaExemplarFisico;
 	private JButton btnAdicionaExemplarOnline;
-	private JButton btnEncontraTituloOnline;
-	private JButton btnEncontraTituloFisico;
-	private JButton btnEncontraEditora;
+	private JButton btnDeletarAutor;
+	private JButton btnDeletarEditora; 
+	private JButton btnDeletarTitulo;
+	private JButton btnDeletarUsuario;
+	private JButton btnAdicionarAutor;
 	
 	public FuncionarioUI(Usuario user, Database dataBase) {
 		setResizable(false);
@@ -38,7 +39,7 @@ public class FuncionarioUI extends JFrame implements ActionListener {
 		this.user = user;
 		setTitle("Biblioteca manager");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 217, 330);
+		setBounds(100, 100, 213, 363);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -62,43 +63,48 @@ public class FuncionarioUI extends JFrame implements ActionListener {
 		
 		btnAdicionaCategoria = new JButton("Adiciona Categoria");
 		btnAdicionaCategoria.addActionListener(this);
-		btnAdicionaCategoria.setBounds(15, 53, 174, 23);
+		btnAdicionaCategoria.setBounds(15, 79, 174, 23);
 		contentPane.add(btnAdicionaCategoria);
-		
-		btnEncontraCategoria = new JButton("Encontra Categoria");
-		btnEncontraCategoria.addActionListener(this);
-		btnEncontraCategoria.setBounds(15, 79, 174, 23);
-		contentPane.add(btnEncontraCategoria);
 		
 		btnAdicionaTitulo = new JButton("Adiciona Titulo");
 		btnAdicionaTitulo.addActionListener(this);
-		btnAdicionaTitulo.setBounds(15, 157, 174, 23);
+		btnAdicionaTitulo.setBounds(15, 131, 174, 23);
 		contentPane.add(btnAdicionaTitulo);
 		
 		btnAdicionaExemplarFisico = new JButton("Adiciona Exemplar Fisico");
 		btnAdicionaExemplarFisico.addActionListener(this);
-		btnAdicionaExemplarFisico.setBounds(15, 183, 174, 23);
+		btnAdicionaExemplarFisico.setBounds(15, 157, 174, 23);
 		contentPane.add(btnAdicionaExemplarFisico);
 		
 		btnAdicionaExemplarOnline = new JButton("Adiciona Exemplar Online");
 		btnAdicionaExemplarOnline.addActionListener(this);
-		btnAdicionaExemplarOnline.setBounds(15, 206, 174, 23);
+		btnAdicionaExemplarOnline.setBounds(15, 183, 174, 23);
 		contentPane.add(btnAdicionaExemplarOnline);
 		
-		btnEncontraTituloOnline = new JButton("Encontra Titulo Online");
-		btnEncontraTituloOnline.addActionListener(this);
-		btnEncontraTituloOnline.setBounds(15, 232, 174, 23);
-		contentPane.add(btnEncontraTituloOnline);
+		btnDeletarAutor = new JButton("Deletar Autor");
+		btnDeletarAutor.addActionListener(this);
+		btnDeletarAutor.setBounds(15, 209, 174, 23);
+		contentPane.add(btnDeletarAutor);
 		
-		btnEncontraTituloFisico = new JButton("Encontra Titulo Fisico");
-		btnEncontraTituloFisico.addActionListener(this);
-		btnEncontraTituloFisico.setBounds(15, 258, 174, 23);
-		contentPane.add(btnEncontraTituloFisico);
+		btnDeletarEditora = new JButton("Deletar Editora");
+		btnDeletarEditora.addActionListener(this);
+		btnDeletarEditora.setBounds(15, 235, 174, 23);
+		contentPane.add(btnDeletarEditora);
 		
-		btnEncontraEditora = new JButton("Encontra Editora");
-		btnEncontraEditora.addActionListener(this);
-		btnEncontraEditora.setBounds(15, 131, 174, 23);
-		contentPane.add(btnEncontraEditora);
+		btnDeletarTitulo = new JButton("Deletar Titulo");
+		btnDeletarTitulo.addActionListener(this);
+		btnDeletarTitulo.setBounds(15, 287, 174, 23);
+		contentPane.add(btnDeletarTitulo);
+		
+		btnDeletarUsuario = new JButton("Deletar Usuario");
+		btnDeletarUsuario.addActionListener(this);
+		btnDeletarUsuario.setBounds(15, 261, 174, 23);
+		contentPane.add(btnDeletarUsuario);
+		
+		btnAdicionarAutor = new JButton("Adicionar Autor");
+		btnAdicionarAutor.addActionListener(this);
+		btnAdicionarAutor.setBounds(15, 53, 174, 23);
+		contentPane.add(btnAdicionarAutor);
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -108,44 +114,78 @@ public class FuncionarioUI extends JFrame implements ActionListener {
 			adicionaEditora();
 			else if(e.getSource() == btnAdicionaCategoria)
 				adicionaCategoria();
-				else if(e.getSource() == btnEncontraCategoria )
-					encontraCategoria();
+				else if(e.getSource() == btnDeletarEditora)
+					deletarEditora();
 					else if(e.getSource() == btnAdicionaTitulo)
 						adicionaTitulo();
 						else if(e.getSource() == btnAdicionaExemplarFisico)
 							adicionaExemplarFisico();
 							else if(e.getSource() == btnAdicionaExemplarOnline)
 								adicionaExemplarOnline();
-								else if(e.getSource() == btnEncontraTituloOnline)
-									encontraTituloOnline();
-									else if(e.getSource() == btnEncontraTituloFisico)
-										encontraTituloFisico();
-										else if(e.getSource() == btnEncontraEditora )
-											encontraEditora();
+								else if(e.getSource() == btnDeletarAutor)
+									deletarAutor();
+									else if(e.getSource() == btnDeletarTitulo)
+										deletarTitulo();
+										else if(e.getSource() == btnDeletarUsuario)
+											deletarUsuario();
+											else if(e.getSource() == btnAdicionarAutor)
+												adicionarAutor();
 		
 
 
 		
 	}
 	
-	private void encontraTituloFisico() {
-		JOptionPane.showMessageDialog(null, "encontra titulo fisico");
+	private void deletarTitulo() {
+		JOptionPane.showMessageDialog(null, "deletar titulo");
 	}
-	private void encontraTituloOnline() {
-		JOptionPane.showMessageDialog(null, "encontra titulo online");
+	private void deletarEditora() {
+		JOptionPane.showMessageDialog(null, "deletar Editora");
 		
 	}
-	private void adicionaExemplarOnline() {
-		JOptionPane.showMessageDialog(null, "adiciona exemplar online");
+	private void deletarAutor() {
+		JOptionPane.showMessageDialog(null, "deletarAutor");
 		
 	}
 	private void adicionaExemplarFisico() {
-		JOptionPane.showMessageDialog(null, "adiciona exemplar fisico");
+		JTextField nomeField = new JTextField(5);
+	    JTextField autorField = new JTextField(5);
+	    JTextField editoraField = new JTextField(5);
+	    JTextField numDisponiveisField = new JTextField(5);
+	    JPanel myPanel = new JPanel();
+	    myPanel.add(new JLabel("Nome:"));
+	    myPanel.add(nomeField);
+	    myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+	    myPanel.add(new JLabel("Autor:"));
+	    myPanel.add(autorField);
+	    myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+	    myPanel.add(new JLabel("Editora:"));
+	    myPanel.add(editoraField);
+	    myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+	    myPanel.add(new JLabel("Num. Disponiveis:"));
+	    myPanel.add(numDisponiveisField);
+	    
+
+	    int result = JOptionPane.showConfirmDialog(null, myPanel, "Digite os dados: ", JOptionPane.OK_CANCEL_OPTION);
+	      if (result == JOptionPane.OK_OPTION) {
+	    	  try {
+	    		  Autor autorLivroAdicionado = dataBase.findAutor(autorField.getText());
+	    		  Editora editoraLivroAdicionado = dataBase.findEditora(editoraField.getText());
+	    		  
+	    		  Titulo tituloAdicionado = new Titulo(nomeField.getText(), autorLivroAdicionado, editoraLivroAdicionado);
+	    		  Titulo tituloEncontrado = dataBase.findTitulo(tituloAdicionado);
+	    		  
+	    		  dataBase.addExemplarFisico(tituloEncontrado.getIdTitulo(), Integer.parseInt(numDisponiveisField.getText()));
+	    		  JOptionPane.showMessageDialog(null, "Livro adicionado com sucesso!");
+	    	  }
+	    	  catch(AutorNaoEncontradoException | TituloNaoEncontradoException | EditoraNaoEncontradaException | DatabaseInoperanteException e1)
+	    	  {
+	    		  JOptionPane.showMessageDialog(null, e1.getMessage() + " Lembre que eu sou case sensitive!!!!");
+	    	  }
+	      }
 		
 	}
 	private void adicionaTitulo() {
-		JOptionPane.showMessageDialog(null, "adiciona titulo");
-		
 		JTextField nomeField = new JTextField(5);
 	    JTextField autorField = new JTextField(5);
 	    JTextField editoraField = new JTextField(5);
@@ -160,7 +200,7 @@ public class FuncionarioUI extends JFrame implements ActionListener {
 	    myPanel.add(editoraField);
 	    
 
-	    int result = JOptionPane.showConfirmDialog(null, myPanel, "Por favor, entre com NOME, AUTOR e EDITORA", JOptionPane.OK_CANCEL_OPTION);
+	    int result = JOptionPane.showConfirmDialog(null, myPanel, "Digite os dados: ", JOptionPane.OK_CANCEL_OPTION);
 	      if (result == JOptionPane.OK_OPTION) {
 	    	  try {
 	    		  Autor autorLivroAdicionado = dataBase.findAutor(autorField.getText());
@@ -179,34 +219,92 @@ public class FuncionarioUI extends JFrame implements ActionListener {
 
 		
 	}
-	private void encontraCategoria() {
-		JOptionPane.showMessageDialog(null, "encontra categoria");
+	private void deletarUsuario() {
+		JOptionPane.showMessageDialog(null, "deletar usuario");
 		
 	}
 	private void adicionaCategoria() {
-		JOptionPane.showMessageDialog(null, "adiciona Categoria");
+		JTextField nomeField = new JTextField(5);
+	    JPanel myPanel = new JPanel();
+	    myPanel.add(new JLabel("Nome:"));
+	    myPanel.add(nomeField);
+	   
+	    int result = JOptionPane.showConfirmDialog(null, myPanel, "Adicionar Categoria", JOptionPane.OK_CANCEL_OPTION);
+	      if (result == JOptionPane.OK_OPTION) {
+	    	  try {
+	    		  dataBase.addCategoria(new Categoria(nomeField.getText()));
+	    		  JOptionPane.showMessageDialog(null, "Operação concluida com sucesso!");
+	    	  }
+	    	  catch(DatabaseInoperanteException e1)
+	    	  {
+	    		  JOptionPane.showMessageDialog(null, e1.getMessage() + " Lembre que eu sou case sensitive!!!!");
+	    	  }
+	      }
 	}
-	private void encontraEditora() {
-		JOptionPane.showMessageDialog(null, "encontra editora");
+	private void adicionaExemplarOnline() {
+		JOptionPane.showMessageDialog(null, "adicionar exemplar online");
 		
 	}
+	
+	
 	private void adicionaEditora() {
-		JOptionPane.showMessageDialog(null, "adiciona editora");
+		JTextField nomeField = new JTextField(5);
+	    JPanel myPanel = new JPanel();
+	    myPanel.add(new JLabel("Nome:"));
+	    myPanel.add(nomeField);
+	   
+	    int result = JOptionPane.showConfirmDialog(null, myPanel, "Adicionar Editora", JOptionPane.OK_CANCEL_OPTION);
+	      if (result == JOptionPane.OK_OPTION) {
+	    	  try {
+	    		  dataBase.addEditora(new Editora(nomeField.getText()));
+	    		  JOptionPane.showMessageDialog(null, "Operação concluida com sucesso!");
+	    	  }
+	    	  catch(DatabaseInoperanteException e1)
+	    	  {
+	    		  JOptionPane.showMessageDialog(null, e1.getMessage() + " Lembre que eu sou case sensitive!!!!");
+	    	  }
+	      }
+	      
 		
 	}
+	
+	private void adicionarAutor() {
+		JTextField nomeField = new JTextField(5);
+	    JPanel myPanel = new JPanel();
+	    myPanel.add(new JLabel("Nome:"));
+	    myPanel.add(nomeField);
+	   
+	    int result = JOptionPane.showConfirmDialog(null, myPanel, "Adicionar Autor", JOptionPane.OK_CANCEL_OPTION);
+	      if (result == JOptionPane.OK_OPTION) {
+	    	  try {
+	    		  dataBase.addAutor(new Autor(nomeField.getText()));
+	    		  JOptionPane.showMessageDialog(null, "Operação concluida com sucesso!");
+	    	  }
+	    	  catch(DatabaseInoperanteException e1)
+	    	  {
+	    		  JOptionPane.showMessageDialog(null, e1.getMessage() + " Lembre que eu sou case sensitive!!!!");
+	    	  }
+	      }
+	}
+	
 	private void tornaUserADM() {
-		String nomeAdm;
-		nomeAdm = JOptionPane.showInputDialog("Qual o nome do usuário?");
-		try {
-		dataBase.tornaUserAdm(nomeAdm);
-		JOptionPane.showMessageDialog(null, "Operação concluida!");
-		}
-		catch(DatabaseInoperanteException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage());
-		}
-	}	
-	
-	
 		
-	
+		JTextField nomeField = new JTextField(5);
+	    JPanel myPanel = new JPanel();
+	    myPanel.add(new JLabel("Nome:"));
+	    myPanel.add(nomeField);
+	   
+	    int result = JOptionPane.showConfirmDialog(null, myPanel, "Tornar usuario administrador", JOptionPane.OK_CANCEL_OPTION);
+	      if (result == JOptionPane.OK_OPTION) {
+	    	  try {
+	    		  dataBase.tornaUserAdm(nomeField.getText());
+	    		  JOptionPane.showMessageDialog(null, "Operação concluida com sucesso!");
+	    	  }
+	    	  catch(DatabaseInoperanteException | UsuarioNaoEncontradoException e1)
+	    	  {
+	    		  JOptionPane.showMessageDialog(null, e1.getMessage() + " Lembre que eu sou case sensitive!!!!");
+	    	  }
+	      }
+	      
+	}	
 }

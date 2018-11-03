@@ -10,7 +10,7 @@ public class Main {
 	}
 
 	public static void main(String[] args) throws DatabaseInoperanteException, UsuarioNaoEncontradoException, SQLException {
-		
+			
 		LoginUI frame = new LoginUI();		EventQueue.invokeLater(new Runnable() {			public void run() {				try {					frame.setVisible(true);				} catch (Exception e) {					e.printStackTrace();				}			}		});
 		
 	}

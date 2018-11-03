@@ -5,9 +5,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.ArrayList;
 
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -36,7 +34,7 @@ public class DatabaseTest {
 	
 	
 	@Test
-	public void testtornaUserAdm(){
+	public void testtornaUserAdm() throws UsuarioNaoEncontradoException{
 		testeDB.tornaUserAdm("Diego");
 	}
 
@@ -60,36 +58,39 @@ public class DatabaseTest {
 	}
 	
 	
-	@Test
+	//@Test
 	//comentei isso aqui para nao criar varias editoras iguais
 	public void testAddEditora() {
-	//	Editora novoEd = new Editora("Rocco");
-	//	assertTrue(testeDB.addEditora(novoEd));
+		Editora novoEd = new Editora("Rocco");
+		assertTrue(testeDB.addEditora(novoEd));
 	}
+	
 	@Test(expected = EditoraNaoEncontradaException.class)
 	public void testFindEditoraInexistente() throws EditoraNaoEncontradaException{
 		testeDB.findEditora("editoraimaginaria");
 	}
+	
 	@Test
 	public void testFindEditoraExistente(){
 			Editora ed = null;
 			try {
-				ed = testeDB.findEditora("teste");
+				ed = testeDB.findEditora("Rocco");
 			} catch (DatabaseInoperanteException | EditoraNaoEncontradaException e) {
 				fail("erro");
 			}
-			assertEquals(6, ed.getId());
+			assertEquals(1, ed.getId());
 		}
 	
-	@Test
+	//@Test
 	public void testAddCategoria() {
-	//	Categoria cat = new Categoria("terror");
-	//	assertTrue(testeDB.addCategoria(cat));
+		Categoria cat = new Categoria("terror");
+		assertTrue(testeDB.addCategoria(cat));
 	}
 	@Test(expected = CategoriaNaoEncontradaException.class)
 	public void testFindCategoriaInexistente() throws CategoriaNaoEncontradaException{
 		testeDB.findCategoria("categoriaimaginaria");
 	}
+	
 	@Test
 	public void testFindCategoriaExistente(){
 			Categoria cat = null;
@@ -98,7 +99,7 @@ public class DatabaseTest {
 			} catch (DatabaseInoperanteException | CategoriaNaoEncontradaException e) {
 				fail("erro");
 			}
-			assertEquals(5, cat.getId());
+			assertEquals(1, cat.getId());
 		}
 	@Test 
 	public void testCriartitulo(){
@@ -109,25 +110,30 @@ public class DatabaseTest {
 		System.out.println(Integer.toString(autor.getId()));
 		System.out.println(Integer.toString(ed.getId()));
 	}
+	//@Test 
+	public void testAddAutor() {
+		Autor autor = new Autor("J. K. Stalin");
+		assertTrue(testeDB.addAutor(autor));
+	}
 	
-	@Test
+	//@Test
 	public void testAddTitulo() {
-	//	Titulo titulo = new Titulo("harry potter and the economic fall of the soviet union",new Autor("J. K. Stalin",3),new Editora("Positivo",2));
-	//	assertTrue(testeDB.addTitulo(titulo));
+		Titulo titulo = new Titulo("harry potter and the economic fall of the soviet union",new Autor("J. K. Stalin",1),new Editora("Rocco",1));
+		assertTrue(testeDB.addTitulo(titulo));
 	}
 	@Test
 	public void testTituloExistente(){
 			Titulo titulo = null;
 			try {
-				titulo = testeDB.findTitulo("Eclipse");
+				titulo = testeDB.findTitulo("harry potter and the economic fall of the soviet union");
 			} catch (DatabaseInoperanteException | TituloNaoEncontradoException e) {
 				fail("erro");
 			}
-			assertEquals(7, titulo.getIdTitulo());
+			assertEquals(3, titulo.getIdTitulo());
 		}
 	
 
-	@Test
+	//@Test
 	public void testListarAlugueis() throws DatabaseInoperanteException, UsuarioNaoEncontradoException {
 		Usuario Eu = testeDB.findUser("Diego", "123");
 		try {
@@ -142,14 +148,18 @@ public class DatabaseTest {
 	@Test
 	public void testListaExemplaresDisponiveis() throws DatabaseInoperanteException, UsuarioNaoEncontradoException {
 		try {
-			ArrayList<ExemplarFisico> lista = testeDB.listaExemplaresDisponiveis("La");
-			assertEquals((lista.get(0)).getNome(), "O Labirinto de Fogo");
-			System.out.println((lista.get(0)).getNome()+"  "+ (lista.get(0)).getNumDisponiveis());
-			System.out.println((lista.get(1)).getNome()+"  "+ (lista.get(1)).getNumDisponiveis());
+			ArrayList<ExemplarFisico> lista = testeDB.listaExemplaresDisponiveis("fall");
+			assertEquals((lista.get(0)).getNome(), "harry potter and the economic fall of the soviet union");
+//			System.out.println((lista.get(0)).getNome()+"  "+ (lista.get(0)).getNumDisponiveis());
+//			System.out.println((lista.get(1)).getNome()+"  "+ (lista.get(1)).getNumDisponiveis());
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
+	//@Test
+	public void testAddExemplarFisico() {
+		assertTrue(testeDB.addExemplarFisico(3, 5));
+	}
 }
