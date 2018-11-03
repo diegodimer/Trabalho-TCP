@@ -12,6 +12,8 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 
 @SuppressWarnings("serial")
 public class RegistroUI extends JFrame implements ActionListener {
@@ -71,7 +73,7 @@ public class RegistroUI extends JFrame implements ActionListener {
 		contentPane.add(lblConfirmeASenha);
 		
 		btnRegistrar = new JButton("Registrar");
-		btnRegistrar.setBounds(99, 204, 89, 23);
+		btnRegistrar.setBounds(68, 204, 89, 23);
 		btnRegistrar.addActionListener(this);
 		contentPane.add(btnRegistrar);
 		
@@ -79,6 +81,11 @@ public class RegistroUI extends JFrame implements ActionListener {
 		lblNovoUsurio.setFont(new Font("Monospaced", Font.PLAIN, 28));
 		lblNovoUsurio.setBounds(10, 11, 265, 65);
 		contentPane.add(lblNovoUsurio);
+		
+		JButton btnCancelar = new JButton("Cancelar");
+		btnCancelar.addActionListener(this);
+		btnCancelar.setBounds(186, 204, 89, 23);
+		contentPane.add(btnCancelar);
 	}
 
 	@Override
@@ -112,7 +119,10 @@ public class RegistroUI extends JFrame implements ActionListener {
 		
 			
 				}
-		}
+		}else
+			this.dispose();
 		
 	}
+	
+	
 }

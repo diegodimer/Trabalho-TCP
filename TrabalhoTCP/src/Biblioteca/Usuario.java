@@ -10,7 +10,7 @@ public class Usuario {
 	private String username;
 	private String password;
 	private int debito;
-	private List<ExemplarAlugado> alugueis;
+	private ArrayList<ExemplarAlugado> alugueis;
 	private String email;
 	private boolean isADM;
 
@@ -77,11 +77,11 @@ public class Usuario {
 		this.isADM = isADM;
 	}
 
-	public List<ExemplarAlugado> getAlugueis() {
+	public ArrayList<ExemplarAlugado> getAlugueis() {
 		return alugueis;
 	}
 
-	public void setAlugueis(List<ExemplarAlugado> alugueis) {
+	public void setAlugueis(ArrayList<ExemplarAlugado> alugueis) {
 		this.alugueis = alugueis;
 	}
 	

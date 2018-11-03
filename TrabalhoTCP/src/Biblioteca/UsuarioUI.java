@@ -1,34 +1,29 @@
 package Biblioteca;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.sql.SQLException;
-import java.util.Iterator;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import javax.swing.JTextPane;
-import javax.swing.RootPaneContainer;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
+import java.awt.Color;
 import java.awt.Font;
-import java.awt.Toolkit;
+import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
-import javax.swing.JSeparator;
-import javax.swing.JButton;
-import javax.swing.JRadioButton;
-import javax.swing.SwingConstants;
+import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+import javax.swing.ScrollPaneConstants;
 
 @SuppressWarnings("serial")
 public class UsuarioUI extends JFrame implements ActionListener {
@@ -37,6 +32,16 @@ public class UsuarioUI extends JFrame implements ActionListener {
 	private Database dataBase;
 	private Usuario user;
 	
+	// painel com alugueis ativos
+	private JPanel panelComAlugueis;
+	private JScrollPane scrollAlugueisAtivos;
+	// ArrayList de alugueis ativos
+	private	ArrayList<JCheckBox> listaAlugueisAtivos; //na função de devolver percorre essa lista procurando os selecionados
+	
+	// painel das buscas
+	private JPanel paneldaBusca;
+	private JScrollPane scrollBusca;
+	private	ArrayList<JCheckBox> listaLivrosMarcadosParaAluguel; // na função de alugar percorre essa lista procurando os selecionados
 	// pra ser editado em outra função nao pode ser de uma função
 	private JTextField conteudoBuscado;
 	
@@ -45,7 +50,6 @@ public class UsuarioUI extends JFrame implements ActionListener {
 	private JButton btnDevolverLivro;
 	private JButton btnHistoricoDeEmprestimos;
 	private JButton btnBuscar;
-	private JTextArea resultadoBusca;
 	
 	// RADIO BUTTONS
 	private final ButtonGroup opcaoBusca = new ButtonGroup(); // grupo de botoes
@@ -53,6 +57,9 @@ public class UsuarioUI extends JFrame implements ActionListener {
 	private JRadioButton rdbtnCategoria;
 	private JRadioButton rdbtnNome;
 	private JRadioButton rdbtnAutor;
+	private JCheckBox chckbxNova;
+	
+	
 	
 	public UsuarioUI(Usuario user, Database dataBase) {
 		setResizable(false);
@@ -67,33 +74,29 @@ public class UsuarioUI extends JFrame implements ActionListener {
 		}
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 451, 357);
+		setBounds(100, 100, 489, 399);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 241, 425, 76);
-		contentPane.add(scrollPane);
+		scrollAlugueisAtivos = new JScrollPane();
+		scrollAlugueisAtivos.setBounds(27, 250, 431, 96);
+		contentPane.add(scrollAlugueisAtivos);
 		
-		JPanel panelComAlugueis = new JPanel();
-		scrollPane.setViewportView(panelComAlugueis);
-		
-		JTextArea listadeAlugueis = new JTextArea();
-		listadeAlugueis.setEditable(false);
-		panelComAlugueis.add(listadeAlugueis);
-		
-		
-		listadeAlugueis.setText(user.listaAlugueisAtivos());
-		
+		panelComAlugueis = new JPanel();
+		scrollAlugueisAtivos.setViewportView(panelComAlugueis);
+		panelComAlugueis.setLayout(new BoxLayout(panelComAlugueis, BoxLayout.Y_AXIS));
+		panelComAlugueis.setBackground(Color.WHITE);
+		listaAlugueisAtivos();
+				
 		JLabel lblAlugueisAtivos = new JLabel("Alugueis Ativos");
 		lblAlugueisAtivos.setFont(new Font("Monospaced", Font.PLAIN, 15));
-		lblAlugueisAtivos.setBounds(10, 220, 184, 19);
+		lblAlugueisAtivos.setBounds(27, 220, 184, 19);
 		contentPane.add(lblAlugueisAtivos);
 		
 		JSeparator separator = new JSeparator();
-		separator.setBounds(27, 210, 376, 29);
+		separator.setBounds(27, 210, 431, 29);
 		contentPane.add(separator);
 		
 		btnAlugarNovoLivro = new JButton("Alugar novo livro");
@@ -111,34 +114,34 @@ public class UsuarioUI extends JFrame implements ActionListener {
 		btnHistoricoDeEmprestimos.setBounds(27, 76, 151, 29);
 		contentPane.add(btnHistoricoDeEmprestimos);
 		
-		JScrollPane scrollBusca = new JScrollPane();
-		scrollBusca.setBounds(199, 65, 225, 120);
+		scrollBusca = new JScrollPane();
+		scrollBusca.setBounds(188, 65, 274, 131);
 		contentPane.add(scrollBusca);
 		
-		JPanel paneldaBusca = new JPanel();
+		paneldaBusca = new JPanel();
 		scrollBusca.setViewportView(paneldaBusca);
+		paneldaBusca.setLayout(new BoxLayout(paneldaBusca, BoxLayout.Y_AXIS));
+		paneldaBusca.setBackground(Color.WHITE);
 		
-		resultadoBusca = new JTextArea();
-		resultadoBusca.setEditable(false);
-		paneldaBusca.add(resultadoBusca);
+		listaLivrosMarcadosParaAluguel = new ArrayList<>();
 		
 		JLabel lblBuscarLivro = new JLabel("Buscar livro");
 		lblBuscarLivro.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblBuscarLivro.setBounds(10, 9, 90, 19);
+		lblBuscarLivro.setBounds(45, 9, 90, 19);
 		contentPane.add(lblBuscarLivro);
 		
 		conteudoBuscado = new JTextField();
-		conteudoBuscado.setBounds(110, 10, 212, 19);
+		conteudoBuscado.setBounds(153, 10, 212, 19);
 		contentPane.add(conteudoBuscado);
 		conteudoBuscado.setColumns(10);
 		
 		btnBuscar = new JButton("Buscar");
 		btnBuscar.addActionListener(this);
-		btnBuscar.setBounds(332, 31, 89, 23);
+		btnBuscar.setBounds(369, 9, 89, 23);
 		contentPane.add(btnBuscar);
 		
 		JPanel panelRadioButtons = new JPanel();
-		panelRadioButtons.setBounds(10, 31, 355, 23);
+		panelRadioButtons.setBounds(55, 31, 355, 23);
 		contentPane.add(panelRadioButtons);
 		
 		rdbtnNome = new JRadioButton("Nome");
@@ -163,22 +166,17 @@ public class UsuarioUI extends JFrame implements ActionListener {
 		opcaoBusca.add(rdbtnCategoria);
 		rdbtnCategoria.setHorizontalAlignment(SwingConstants.CENTER);
 		panelRadioButtons.add(rdbtnCategoria);
+		
 	}
 	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == btnBuscar) {
 			if(rdbtnNome.isSelected()) {
-				StringBuilder str = new StringBuilder();
-				
 				try {
-				for (Iterator<ExemplarFisico> iterator = dataBase.listaExemplaresDisponiveis(conteudoBuscado.getText()).iterator(); iterator.hasNext();) {
-					ExemplarFisico exemplarFisico = iterator.next();
-					str.append("Nome: " + exemplarFisico.getNome() + "\n\tAutor: " + exemplarFisico.getAutor().getNome() + "\n\tEditora: " + exemplarFisico.getEditora().getNome() + "\n\tNº Disponiveis: " + exemplarFisico.getNumDisponiveis() +"\n\n");
-				}
-				resultadoBusca.setText(str.toString());
-				}
-				catch(SQLException e2) {
-					JOptionPane.showMessageDialog(null, e2.getMessage());
+					ArrayList<ExemplarFisico> resultadoBusca = dataBase.listaExemplaresDisponiveis(conteudoBuscado.getText());
+					listaResultadoBusca(resultadoBusca);
+				} catch (DatabaseInoperanteException | SQLException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage());
 				}
 				
 			}
@@ -194,5 +192,59 @@ public class UsuarioUI extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(null, "Escolha um parametro para buscar!");
 			}
 		}
+	}
+	void listaAlugueisAtivos() {
+		ArrayList<ExemplarAlugado> alugueisDoUsuario = new ArrayList<ExemplarAlugado>();
+		ExemplarAlugado livroAlugadoUsuario;
+		try {
+			dataBase.listaAlgueisdoUsuario(user);
+			alugueisDoUsuario = user.getAlugueis();
+		} catch (DatabaseInoperanteException | SQLException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+		}
+		listaAlugueisAtivos = new ArrayList<>();
+		for(int i=0; alugueisDoUsuario.size() > i; i++) {
+			livroAlugadoUsuario = alugueisDoUsuario.get(i);
+			chckbxNova = new JCheckBox("Nome: " + livroAlugadoUsuario.getNome() + "   Devolução em: " + livroAlugadoUsuario.getDataDevolucao() );
+			chckbxNova.setMnemonic(livroAlugadoUsuario.getIdTitulo());
+			listaAlugueisAtivos.add(chckbxNova);
+			chckbxNova.setBackground(Color.WHITE);
+			panelComAlugueis.add(chckbxNova);
+		}
+		scrollAlugueisAtivos.validate();
+		scrollAlugueisAtivos.repaint();
+		panelComAlugueis.validate();
+		panelComAlugueis.repaint();
+		
+	}
+	
+	void listaResultadoBusca(ArrayList<ExemplarFisico> listadeResultados) {
+		
+		paneldaBusca.removeAll(); // tira tudo que tem na busca
+		JCheckBox checkBoxBusca;
+		listaLivrosMarcadosParaAluguel.clear();
+		
+		for(int i=0; listadeResultados.size() > i; i++) {
+			ExemplarFisico livroAchado= listadeResultados.get(i);
+			checkBoxBusca = new JCheckBox("Nome: " + livroAchado.getNome() + 
+					"      Autor: " + livroAchado.getAutor().getNome() + 
+					"      Editora: " + livroAchado.getEditora().getNome() + 
+					"      Numº Disponiveis: " + livroAchado.getNumDisponiveis());
+			
+			checkBoxBusca.setMnemonic(livroAchado.getIdTitulo());
+			checkBoxBusca.setBackground(Color.WHITE);
+			checkBoxBusca.setAlignmentX(LEFT_ALIGNMENT);
+			checkBoxBusca.setAlignmentY(LEFT_ALIGNMENT);
+			if(livroAchado.getNumDisponiveis()==0) {
+				checkBoxBusca.setEnabled(false);
+			}
+			listaLivrosMarcadosParaAluguel.add(checkBoxBusca);
+			paneldaBusca.add(checkBoxBusca);
+						
+		}
+		paneldaBusca.validate();
+		paneldaBusca.repaint();
+		scrollBusca.validate();
+		scrollBusca.repaint();
 	}
 }
