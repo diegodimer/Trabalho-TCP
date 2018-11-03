@@ -141,6 +141,60 @@ public class Database {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
+	public ArrayList<ExemplarFisico> listaExemplaresDisponiveisPorAutor(String nome) throws DatabaseInoperanteException, SQLException {
+		try {
+			PreparedStatement st = conec.prepareStatement("SELECT nomet,nomeau,idau,nomeed,ided,idtitulo,num_disponiveis FROM Titulo JOIN autor ON(autor=idau) JOIN editora ON (ided=editora) JOIN exemplarfisico ON (livro = idtitulo) WHERE nomeau LIKE ?");
+			st.setString(1,"%"+ nome+"%");
+			ResultSet rs = null;
+			rs = st.executeQuery();
+			ArrayList<ExemplarFisico> lista = new ArrayList<>();
+			while (rs.next())
+			{
+				lista.add(new ExemplarFisico(rs.getString(1), new Autor(rs.getString(2),rs.getInt(3)),new Editora(rs.getString(4),rs.getInt(5)),rs.getInt(6),rs.getInt(7)));
+ 
+			}
+			return lista;
+		} catch (SQLException e) {
+			throw new DatabaseInoperanteException("Erro na database");
+		}
+	}
+	public ArrayList<ExemplarFisico> listaExemplaresDisponiveisPorEditora(String nome) throws DatabaseInoperanteException, SQLException {
+		try {
+			PreparedStatement st = conec.prepareStatement("SELECT nomet,nomeau,idau,nomeed,ided,idtitulo,num_disponiveis FROM Titulo JOIN autor ON(autor=idau) JOIN editora ON (ided=editora) JOIN exemplarfisico ON (livro = idtitulo) WHERE nomeed LIKE ?");
+			st.setString(1,"%"+ nome+"%");
+			ResultSet rs = null;
+			rs = st.executeQuery();
+			ArrayList<ExemplarFisico> lista = new ArrayList<>();
+			while (rs.next())
+			{
+				lista.add(new ExemplarFisico(rs.getString(1), new Autor(rs.getString(2),rs.getInt(3)),new Editora(rs.getString(4),rs.getInt(5)),rs.getInt(6),rs.getInt(7)));
+ 
+			}
+			return lista;
+		} catch (SQLException e) {
+			throw new DatabaseInoperanteException("Erro na database");
+		}
+	}
+	public ArrayList<ExemplarFisico> listaExemplaresDisponiveisPorCategoria(String nome) throws DatabaseInoperanteException, SQLException {
+		try {
+			PreparedStatement st = conec.prepareStatement("SELECT nomet,nomeau,idau,nomeed,ided,idtitulo,num_disponiveis FROM Titulo JOIN autor ON(autor=idau) JOIN editora ON (ided=editora) JOIN exemplarfisico ON (livro = idtitulo) JOIN categoriaportitulo ON (idtitulo = categoriaportitulo.livro) JOIN categoria ON (categoriaportitulo.categoria =idca) WHERE nomeca LIKE ?;");
+			st.setString(1,"%"+ nome+"%");
+			ResultSet rs = null;
+			rs = st.executeQuery();
+			ArrayList<ExemplarFisico> lista = new ArrayList<>();
+			while (rs.next())
+			{
+				lista.add(new ExemplarFisico(rs.getString(1), new Autor(rs.getString(2),rs.getInt(3)),new Editora(rs.getString(4),rs.getInt(5)),rs.getInt(6),rs.getInt(7)));
+ 
+			}
+			return lista;
+		} catch (SQLException e) {
+			throw new DatabaseInoperanteException("Erro na database");
+		}
+	}
+	
+	
+	
 	public boolean addAutor(Autor autor) {
 		try {
 			PreparedStatement st = conec.prepareStatement("INSERT INTO Autor(nomeau) VALUES (?)");
@@ -155,6 +209,9 @@ public class Database {
 		}
 		
 	}
+	
+	
+	
 	
 	public Autor findAutor(String nome) throws AutorNaoEncontradoException, DatabaseInoperanteException{
 		PreparedStatement st;
@@ -179,6 +236,20 @@ public class Database {
 			else
 				throw new AutorNaoEncontradoException("Autor não encontrado!"); //
 		} catch (SQLException e) {
+			throw new DatabaseInoperanteException("Erro na database");
+		}
+	}
+	public boolean addCategoriaPorTitulo(int idtitulo, int idcat) {
+		try {
+			PreparedStatement st = conec.prepareStatement("INSERT INTO CategoriaPorTitulo(livro,categoria) VALUES (?,?)");
+			st.setInt(1, idtitulo);
+			st.setInt(2, idcat);
+			st.executeUpdate();
+			st.close();
+			return true;
+		}
+		catch(Exception e)
+		{
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
@@ -351,8 +422,44 @@ public class Database {
 		}
 	}
 	
-	public boolean removeTitulo(Titulo livro) {
-		return false;
+	public boolean removeTitulo(int idtitulo) {
+		try {
+			PreparedStatement st = conec.prepareStatement("DELETE FROM titulo WHERE idtitulo = ?");
+			st.setInt(1, idtitulo);
+			st.executeUpdate();
+			st.close();
+			return true;
+		}
+		catch(Exception e)
+		{
+			throw new DatabaseInoperanteException("Erro na database");
+		}
+	}
+	public boolean removeAutor(int idau) {
+		try {
+			PreparedStatement st = conec.prepareStatement("DELETE FROM autor WHERE idau = ?");
+			st.setInt(1, idau);
+			st.executeUpdate();
+			st.close();
+			return true;
+		}
+		catch(Exception e)
+		{
+			throw new DatabaseInoperanteException("Erro na database");
+		}
+	}
+	public boolean removeEditora(int ided) {
+		try {
+			PreparedStatement st = conec.prepareStatement("DELETE FROM editora WHERE ided = ?");
+			st.setInt(1, ided);
+			st.executeUpdate();
+			st.close();
+			return true;
+		}
+		catch(Exception e)
+		{
+			throw new DatabaseInoperanteException("Erro na database");
+		}
 	}
 
 	

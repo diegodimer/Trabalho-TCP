@@ -146,7 +146,7 @@ public class DatabaseTest {
 	}
 	
 	@Test
-	public void testListaExemplaresDisponiveis() throws DatabaseInoperanteException, UsuarioNaoEncontradoException {
+	public void testListaExemplaresDisponiveis() throws DatabaseInoperanteException, TituloNaoEncontradoException {
 		try {
 			ArrayList<ExemplarFisico> lista = testeDB.listaExemplaresDisponiveis("fall");
 			assertEquals((lista.get(0)).getNome(), "harry potter and the economic fall of the soviet union");
@@ -156,6 +156,61 @@ public class DatabaseTest {
 		catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	@Test
+	public void testListaExemplaresDisponiveisPorAutor() throws DatabaseInoperanteException, TituloNaoEncontradoException {
+		try {
+			ArrayList<ExemplarFisico> lista = testeDB.listaExemplaresDisponiveisPorAutor("Stalin");
+			assertEquals((lista.get(0)).getNome(), "harry potter and the economic fall of the soviet union");
+//			System.out.println((lista.get(0)).getNome()+"  "+ (lista.get(0)).getNumDisponiveis());
+//			System.out.println((lista.get(1)).getNome()+"  "+ (lista.get(1)).getNumDisponiveis());
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	@Test
+	public void testListaExemplaresDisponiveisPorEditora() throws DatabaseInoperanteException, TituloNaoEncontradoException {
+		try {
+			ArrayList<ExemplarFisico> lista = testeDB.listaExemplaresDisponiveisPorEditora("Rocco");
+			assertEquals((lista.get(0)).getNome(), "harry potter and the economic fall of the soviet union");
+//			System.out.println((lista.get(0)).getNome()+"  "+ (lista.get(0)).getNumDisponiveis());
+//			System.out.println((lista.get(1)).getNome()+"  "+ (lista.get(1)).getNumDisponiveis());
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	@Test
+	public void testListaExemplaresDisponiveisPorCategoria() throws DatabaseInoperanteException, TituloNaoEncontradoException {
+		try {
+			ArrayList<ExemplarFisico> lista = testeDB.listaExemplaresDisponiveisPorCategoria("juvenil");
+			assertEquals((lista.get(0)).getNome(), "harry potter and the economic fall of the soviet union");
+//			System.out.println((lista.get(0)).getNome()+"  "+ (lista.get(0)).getNumDisponiveis());
+//			System.out.println((lista.get(1)).getNome()+"  "+ (lista.get(1)).getNumDisponiveis());
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testAddCategoriaPorTitulo() {
+	//	assertTrue(testeDB.addCategoriaPorTitulo(3, 4));
+	}
+	
+	@Test
+	public void testRemoveTitulo() {
+	//	assertTrue(testeDB.removeTitulo(8));
+	}
+	
+	@Test
+	public void testRemoveAutor() {
+	//	assertTrue(testeDB.removeAutor(6));
+	}
+	@Test
+	public void testRemoveEditora() {
+	//	assertTrue(testeDB.removeEditora(6));
 	}
 	
 	//@Test
