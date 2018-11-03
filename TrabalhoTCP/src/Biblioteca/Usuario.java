@@ -2,6 +2,8 @@ package Biblioteca;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.text.html.HTMLDocument.Iterator;
+
 public class Usuario {
 
 	private int userid;
@@ -85,5 +87,16 @@ public class Usuario {
 	
 	public void adicionaNovoAluguel(ExemplarAlugado aluguel) {
 		this.alugueis.add(aluguel);
+	}
+	
+	public String listaAlugueisAtivos() {
+		
+		StringBuilder stringBuilder = new StringBuilder();
+		
+		for(int i = 0 ; i < alugueis.size() ; i++ )
+			stringBuilder.append( "Nome: " +  alugueis.get(i).getNome() + " Emprestado em: " + alugueis.get(i).getDataEmprestimo() + " Devolução: " + alugueis.get(i).getDataDevolucao() + "\n");
+		
+		return stringBuilder.toString();
+		
 	}
 }

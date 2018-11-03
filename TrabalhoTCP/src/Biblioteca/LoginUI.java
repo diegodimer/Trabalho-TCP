@@ -28,6 +28,7 @@ public class LoginUI extends JFrame implements ActionListener {
 	 * Create the frame.
 	 */
 	public LoginUI() {
+		setResizable(false);
 		database = new Database(); // abre a database (por isso demora um pouco pra aparecer a tela)
 		
 		setTitle("Tela de login");
@@ -41,7 +42,7 @@ public class LoginUI extends JFrame implements ActionListener {
 		JLabel lblTrabalhoDeTcp = new JLabel("Sistema de Biblioteca");
 		lblTrabalhoDeTcp.setBounds(10, 28, 424, 27);
 		lblTrabalhoDeTcp.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTrabalhoDeTcp.setFont(new Font("Tahoma", Font.PLAIN, 27));
+		lblTrabalhoDeTcp.setFont(new Font("Monospaced", Font.PLAIN, 30));
 		contentPane.add(lblTrabalhoDeTcp);
 		
 		usernameField = new JTextField();
@@ -87,6 +88,11 @@ public class LoginUI extends JFrame implements ActionListener {
 		memeLogin.setSize(219, 195);
 		contentPane.add(memeLogin);
 		
+		JButton btnCriarConta = new JButton("Criar conta");
+		btnCriarConta.addActionListener(this);
+		btnCriarConta.setBounds(215, 102, 111, 23);
+		contentPane.add(btnCriarConta);
+		
 		btnLogin.addActionListener(this);
 	}
 	// esse método é as ações dos botões
@@ -100,17 +106,25 @@ public class LoginUI extends JFrame implements ActionListener {
 			
 			try {
 				user = database.findUser(usernameField.getText(), stringBuilder.toString());
+				JOptionPane.showMessageDialog(null, "Login realizado com sucesso!");
 				if(user.isADM())
 				{
-					JOptionPane.showMessageDialog(null, "Login administrador feito!");
+					FuncionarioUI admUserFrame = new FuncionarioUI(user, database);
+					admUserFrame.setVisible(true);
 				}
-				else
-					JOptionPane.showMessageDialog(null, "Login usuario feito!");
+				UsuarioUI regularUserFrame = new UsuarioUI(user, database);
+				regularUserFrame.setVisible(true);
+				this.dispose(); // fecha esse frame de login
+					
 			} catch (DatabaseInoperanteException | UsuarioNaoEncontradoException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage()); // erro mostra a mensagem daquela exceção
 			}
 			
 			
+		}
+		else {
+			RegistroUI registrar = new RegistroUI(database);
+			registrar.setVisible(true);
 		}
 	}
 }
