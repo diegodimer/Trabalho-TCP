@@ -3,6 +3,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.junit.AfterClass;
@@ -216,5 +217,43 @@ public class DatabaseTest {
 	//@Test
 	public void testAddExemplarFisico() {
 		assertTrue(testeDB.addExemplarFisico(3, 5));
+	}
+	
+	@Test
+	public void testListaExemplarOnlinePorTitulo() throws DatabaseInoperanteException, SQLException {
+	ArrayList<ExemplarOnline> exemplaresOnline = testeDB.listaExemplarOnlinePorTitulo("O Ladrão");
+	assertEquals(exemplaresOnline.get(0).getIdTitulo(), 5);
+	}
+	
+	@Test
+	public void testfindTitulo() throws TituloNaoEncontradoException {
+		Titulo testeFindTitulo = testeDB.findTitulo(3);
+		assertEquals(testeFindTitulo.getIdTitulo(), 3);
+	}
+	
+	//@Test
+	public void testAdicionaAluguelAtivo() throws TituloNaoEncontradoException {
+		Titulo livro = testeDB.findTitulo(5);
+		assertTrue( testeDB.adicionaAluguelAtivo(1, livro));
+	}
+	//@Test(expected = DatabaseInoperanteException.class)
+	public void testAdicionaAluguelAtivoJaExistente() throws TituloNaoEncontradoException {
+		Titulo livro = testeDB.findTitulo(3);
+		assertTrue( testeDB.adicionaAluguelAtivo(1, livro));
+	}
+	@Test
+	public void testFindExemplarFisico() throws DatabaseInoperanteException, SQLException {
+		ExemplarFisico livro = testeDB.findExemplarFisico(3);
+		assertEquals(livro.getIdTitulo(), 3);
+	}
+	
+	//@Test
+	public void testdevolveLivroAlugado() throws Exception {
+		testeDB.devolveLivroAlugado(1, 3);
+	}
+	@Test
+	public void testlistaExemplaresDevolvidos() {
+		ArrayList<ExemplarAlugado> lista = testeDB.listaExemplaresDevolvidos(1);
+		System.out.println(lista.get(0).getNome());
 	}
 }

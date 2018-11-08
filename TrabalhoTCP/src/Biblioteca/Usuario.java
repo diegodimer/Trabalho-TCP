@@ -99,4 +99,8 @@ public class Usuario {
 		return stringBuilder.toString();
 		
 	}
+	public void resetaAlugueis() {
+		this.alugueis.clear();
+		
+	}
 }

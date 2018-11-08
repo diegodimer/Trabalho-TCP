@@ -4,6 +4,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 
@@ -12,13 +13,13 @@ public class Database {
 	private String senha;
 	private String url;
 	private Connection conec;
-	
+
 	// esse método construtor faz a conexão com o banco de dados. Até então eu fiz só printar se ta tudo ok
 	Database() {
 		url= "jdbc:postgresql://ec2-107-21-98-165.compute-1.amazonaws.com:5432/d3bt62m75hbk3k";
 		usuario= "eiyrmkkfmwgvay";
 		senha = "314fa4d9877c8f5f19446f16ec2bbde64767e9e348d2eaa9851e87006959b978";
-		
+
 		try {
 			Class.forName("org.postgresql.Driver");
 			conec = DriverManager.getConnection(url, usuario, senha);
@@ -29,7 +30,7 @@ public class Database {
 	}
 
 	public Usuario findUser(String nome, String senha) throws UsuarioNaoEncontradoException, DatabaseInoperanteException {
-		
+
 		PreparedStatement st;
 		boolean UserFound = false;
 		try {
@@ -44,12 +45,12 @@ public class Database {
 				user.setDebito(rs.getInt(5));
 				user.setUserid(rs.getInt(1));
 				user.setADM(rs.getBoolean(6));
-			    
-			    UserFound = true;
+
+				UserFound = true;
 			}
 			rs.close();
 			st.close();
-			
+
 			if (UserFound)
 			{
 				return user;
@@ -59,8 +60,8 @@ public class Database {
 		} catch (SQLException e) {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
-		
-	
+
+
 	}
 
 	public boolean addUser(Usuario user) throws DatabaseInoperanteException {
@@ -80,14 +81,14 @@ public class Database {
 			throw new DatabaseInoperanteException("Usuário já existente");
 		}
 	}
-	
+
 	public void tornaUserAdm(String nomeAdm) throws DatabaseInoperanteException, UsuarioNaoEncontradoException {
 		int i;
-		
+
 		try {
 			PreparedStatement st = conec.prepareStatement("UPDATE Usuario set adm='true' where nome= ?");
 			st.setString(1, nomeAdm);
-			
+
 			i = st.executeUpdate();
 			i = st.getUpdateCount();
 			st.close();
@@ -99,11 +100,12 @@ public class Database {
 		if(i==0) {
 			throw new UsuarioNaoEncontradoException("Usuário não encontrado!");
 		}
-		
-		
+
+
 	}
 	public void listaAlgueisdoUsuario(Usuario user) throws DatabaseInoperanteException, SQLException {
 		try {
+			user.resetaAlugueis();
 			PreparedStatement st = conec.prepareStatement("SELECT nomet, idtitulo, nomeau, idau, ided, nomeed, datadevolucao, dataemprestimo "
 					+ " FROM AluguelAtivo JOIN Titulo ON(livro=idtitulo) JOIN usuario ON(usuario=idu) JOIN autor ON(autor=idau) JOIN editora ON (ided=editora) "
 					+ " WHERE idu = ?");
@@ -123,7 +125,7 @@ public class Database {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
-	
+
 	public ArrayList<ExemplarFisico> listaExemplaresDisponiveis(String nome) throws DatabaseInoperanteException, SQLException {
 		try {
 			PreparedStatement st = conec.prepareStatement("SELECT nomet,nomeau,idau,nomeed,ided,idtitulo,num_disponiveis FROM Titulo JOIN autor ON(autor=idau) JOIN editora ON (ided=editora) JOIN exemplarfisico ON (livro = idtitulo) WHERE nomet LIKE ?");
@@ -134,13 +136,15 @@ public class Database {
 			while (rs.next())
 			{
 				lista.add(new ExemplarFisico(rs.getString(1), new Autor(rs.getString(2),rs.getInt(3)),new Editora(rs.getString(4),rs.getInt(5)),rs.getInt(6),rs.getInt(7)));
- 
+
 			}
 			return lista;
 		} catch (SQLException e) {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
+
+
 	public ArrayList<ExemplarFisico> listaExemplaresDisponiveisPorAutor(String nome) throws DatabaseInoperanteException, SQLException {
 		try {
 			PreparedStatement st = conec.prepareStatement("SELECT nomet,nomeau,idau,nomeed,ided,idtitulo,num_disponiveis FROM Titulo JOIN autor ON(autor=idau) JOIN editora ON (ided=editora) JOIN exemplarfisico ON (livro = idtitulo) WHERE nomeau LIKE ?");
@@ -151,7 +155,7 @@ public class Database {
 			while (rs.next())
 			{
 				lista.add(new ExemplarFisico(rs.getString(1), new Autor(rs.getString(2),rs.getInt(3)),new Editora(rs.getString(4),rs.getInt(5)),rs.getInt(6),rs.getInt(7)));
- 
+
 			}
 			return lista;
 		} catch (SQLException e) {
@@ -168,7 +172,7 @@ public class Database {
 			while (rs.next())
 			{
 				lista.add(new ExemplarFisico(rs.getString(1), new Autor(rs.getString(2),rs.getInt(3)),new Editora(rs.getString(4),rs.getInt(5)),rs.getInt(6),rs.getInt(7)));
- 
+
 			}
 			return lista;
 		} catch (SQLException e) {
@@ -185,16 +189,36 @@ public class Database {
 			while (rs.next())
 			{
 				lista.add(new ExemplarFisico(rs.getString(1), new Autor(rs.getString(2),rs.getInt(3)),new Editora(rs.getString(4),rs.getInt(5)),rs.getInt(6),rs.getInt(7)));
- 
+
 			}
 			return lista;
 		} catch (SQLException e) {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
-	
-	
-	
+
+	public ExemplarFisico findExemplarFisico (int idTitulo) throws DatabaseInoperanteException, SQLException {
+		try {
+			PreparedStatement st = conec.prepareStatement("SELECT nomet,nomeau,idau,nomeed,ided,idtitulo,num_disponiveis FROM Titulo JOIN autor ON(autor=idau) JOIN editora ON (ided=editora) JOIN exemplarfisico ON (livro = idtitulo) where idtitulo = ? ");
+			st.setInt(1, idTitulo);
+			ResultSet rs = null;
+			boolean livroAchado = false;
+			rs = st.executeQuery();
+			ExemplarFisico livro = null;
+			while (rs.next())
+			{
+				livro = new ExemplarFisico(rs.getString(1), new Autor(rs.getString(2),rs.getInt(3)),new Editora(rs.getString(4),rs.getInt(5)),rs.getInt(6),rs.getInt(7));
+				livroAchado = true;
+			}
+			if(livroAchado)
+				return livro;
+			else
+				throw new DatabaseInoperanteException("Livro não encontrado!");
+		} catch (SQLException e) {
+			throw new DatabaseInoperanteException("Erro na database");
+		}
+	}
+
 	public boolean addAutor(Autor autor) {
 		try {
 			PreparedStatement st = conec.prepareStatement("INSERT INTO Autor(nomeau) VALUES (?)");
@@ -207,12 +231,12 @@ public class Database {
 		{
 			throw new DatabaseInoperanteException("Erro na database");
 		}
-		
+
 	}
-	
-	
-	
-	
+
+
+
+
 	public Autor findAutor(String nome) throws AutorNaoEncontradoException, DatabaseInoperanteException{
 		PreparedStatement st;
 		boolean autorFound = false;
@@ -224,11 +248,11 @@ public class Database {
 			while (rs.next())
 			{
 				autor = new Autor(rs.getString(1), rs.getInt(2));
-			    autorFound = true;
+				autorFound = true;
 			}
 			rs.close();
 			st.close();
-			
+
 			if (autorFound)
 			{
 				return autor;
@@ -253,8 +277,8 @@ public class Database {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
-	
-	
+
+
 	public boolean addEditora(Editora ed) throws DatabaseInoperanteException{
 		try {
 			PreparedStatement st = conec.prepareStatement("INSERT INTO Editora(nomeed) VALUES (?)");
@@ -279,12 +303,12 @@ public class Database {
 			while (rs.next())
 			{
 				ed = new Editora(rs.getString(1), rs.getInt(2));
-			    
-			    UserFound = true;
+
+				UserFound = true;
 			}
 			rs.close();
 			st.close();
-			
+
 			if (UserFound)
 			{
 				return ed;
@@ -295,7 +319,7 @@ public class Database {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
-	
+
 	public boolean addCategoria(Categoria cat) throws DatabaseInoperanteException{
 		try {
 			PreparedStatement st = conec.prepareStatement("INSERT INTO categoria(nomeca) VALUES (?)");
@@ -320,12 +344,12 @@ public class Database {
 			while (rs.next())
 			{
 				cat = new Categoria(rs.getString(1), rs.getInt(2));
-			    
-			    UserFound = true;
+
+				UserFound = true;
 			}
 			rs.close();
 			st.close();
-			
+
 			if (UserFound)
 			{
 				return cat;
@@ -336,24 +360,24 @@ public class Database {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
-	
-	
+
+
 	public boolean atualizaUsuario(Usuario user) {
 		return false;
-		
+
 	}
 
 	public boolean addTitulo(Titulo livro) {
 		try {
 			PreparedStatement st = conec.prepareStatement("INSERT INTO titulo(nomet,autor,editora) VALUES (?, ?, ?)");
 			st.setString(1, livro.getNome());
-			
+
 			Autor autor = livro.getAutor();
 			st.setInt(2, autor.getId());
-			
+
 			Editora ed = livro.getEditora();	
 			st.setInt(3, ed.getId());
-			
+
 			st.executeUpdate();
 			st.close();
 			return true;
@@ -375,12 +399,12 @@ public class Database {
 			while (rs.next())
 			{
 				titulo = new Titulo(rs.getString(1), new Autor(rs.getString(5),rs.getInt(6)), new Editora(rs.getString(7),rs.getInt(8)),rs.getInt(4));
-			    
-			    UserFound = true;
+
+				UserFound = true;
 			}
 			rs.close();
 			st.close();
-			
+
 			if (UserFound)
 			{
 				return titulo;
@@ -405,12 +429,12 @@ public class Database {
 			while (rs.next())
 			{
 				tituloProcurado = new Titulo(rs.getString(1), new Autor(rs.getString(5),rs.getInt(6)), new Editora(rs.getString(7),rs.getInt(8)),rs.getInt(4));
-			    
-			    titleFound = true;
+
+				titleFound = true;
 			}
 			rs.close();
 			st.close();
-			
+
 			if (titleFound)
 			{
 				return tituloProcurado;
@@ -421,7 +445,38 @@ public class Database {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
-	
+
+
+	public Titulo findTitulo(int idTitulo) throws TituloNaoEncontradoException {
+		PreparedStatement st;
+		boolean titleFound = false;
+		try {
+			st = conec.prepareStatement("SELECT * FROM titulo JOIN autor ON (autor=idau) JOIN editora ON (editora = ided)  WHERE idtitulo= ?");
+			st.setInt(1, idTitulo);
+			Titulo tituloProcurado= new Titulo();
+			ResultSet rs = st.executeQuery();
+			while (rs.next())
+			{
+				tituloProcurado = new Titulo(rs.getString(1), new Autor(rs.getString(5),rs.getInt(6)), new Editora(rs.getString(7),rs.getInt(8)),rs.getInt(4));
+
+				titleFound = true;
+			}
+			rs.close();
+			st.close();
+
+			if (titleFound)
+			{
+				return tituloProcurado;
+			}
+			else
+				throw new TituloNaoEncontradoException("titulo nao encontrado!");
+		} catch (SQLException e) {
+			throw new DatabaseInoperanteException("Erro na database");
+		}
+	}
+
+
+
 	public boolean removeTitulo(int idtitulo) {
 		try {
 			PreparedStatement st = conec.prepareStatement("DELETE FROM titulo WHERE idtitulo = ?");
@@ -462,114 +517,114 @@ public class Database {
 		}
 	}
 
-	
+
 	void closeDatabase() throws SQLException {
 		conec.close();
 	}
 
 
-	
-	
-	
-	
+
+
+
+
 	void criaTodasTabelas() {
 		try {
-		PreparedStatement st = conec.prepareStatement("create table Editora(\r\n" + 
-				"	nomeed varchar(30) not null,\r\n" + 
-				"	ided serial primary key,\r\n" + 
-				"	unique (nomeed)\r\n" + 
-				");\r\n" + 
-				"");
-		PreparedStatement st2 = conec.prepareStatement("create table Autor(\r\n" + 
-				"	nomeau varchar(70) not null,\r\n" + 
-				"	idau serial primary key,\r\n" + 
-				"	unique (nomeau)\r\n" + 
-				");");
-		PreparedStatement st3 = conec.prepareStatement("create table Categoria(\r\n" + 
-				"	nomeca varchar(30),\r\n" + 
-				"	idca serial primary key,\r\n" + 
-				"	unique (nomeca)\r\n" + 
-				");");
-		PreparedStatement st4 = conec.prepareStatement("create table Titulo(\r\n" + 
-				"	nomet varchar(90),\r\n" + 
-				"	autor integer references Autor\r\n" + 
-				"	on update cascade\r\n" + 
-				"	on delete cascade,\r\n" + 
-				"	editora integer references Editora\r\n" + 
-				"	on delete cascade\r\n" + 
-				"	on update cascade,\r\n" + 
-				"	idTitulo serial primary key,\r\n" + 
-				"	unique (nomet, autor, editora)\r\n" + 
-				");");
-		PreparedStatement st5 = conec.prepareStatement("\r\n" + 
-				"create table CategoriaPorTitulo(\r\n" + 
-				"	livro integer references Titulo\r\n" + 
-				"	on update cascade\r\n" + 
-				"	on delete cascade,\r\n" + 
-				"	categoria integer references Categoria\r\n" + 
-				"	on update cascade\r\n" + 
-				"	on delete cascade,\r\n" + 
-				"	primary key(livro, categoria)\r\n" + 
-				");\r\n" + 
-				"");
-		PreparedStatement st6 = conec.prepareStatement("create table ExemplarFisico(\r\n" + 
-				"	livro integer references Titulo\r\n" + 
-				"	on update cascade\r\n" + 
-				"	on delete cascade,\r\n" + 
-				"	num_disponiveis integer not null,\r\n" + 
-				"	primary key (livro)\r\n" + 
-				");\r\n" + 
-				"");
-		PreparedStatement st7 = conec.prepareStatement("create table ExemplarOnline(\r\n" + 
-				"	livro integer references Titulo\r\n" + 
-				"	on update cascade\r\n" + 
-				"	on delete cascade,\r\n" + 
-				"	link varchar(30),\r\n" + 
-				"	primary key(livro)\r\n" + 
-				");\r\n" + 
-				"");
-		PreparedStatement st8 = conec.prepareStatement("create table Usuario(\r\n" + 
-				"	idu serial primary key,\r\n" + 
-				"	nome varchar(30) not null unique,\r\n" + 
-				"	senha varchar(30) not null,\r\n" + 
-				"	email varchar(50) not null unique,\r\n" + 
-				"	debito integer not null,\r\n" + 
-				"	adm bool not null\r\n" + 
-				");");
-		PreparedStatement st9 = conec.prepareStatement("create table AluguelAtivo(\r\n" + 
-				"	livro integer references ExemplarFisico\r\n" + 
-				"	on update cascade \r\n" + 
-				"	on delete cascade,\r\n" + 
-				"	usuario integer references Usuario\r\n" + 
-				"	on update cascade\r\n" + 
-				"	on delete cascade,\r\n" + 
-				"	dataEmprestimo date not null,\r\n" + 
-				"	dataDevolucao date not null,\r\n" + 
-				"	unique(livro, usuario)\r\n" + 
-				");");
-		PreparedStatement st10 = conec.prepareStatement("create table AluguelInativo(\r\n" + 
-				"	livro integer references ExemplarFisico \r\n" + 
-				"	on update cascade \r\n" + 
-				"	on delete cascade,\r\n" + 
-				"	usuario integer references Usuario\r\n" + 
-				"	on update cascade\r\n" + 
-				"	on delete cascade,\r\n" + 
-				"	dataEmprestimo date not null,\r\n" + 
-				"	dataDevolucao date not null\r\n" + 
-				");");
-		
-		st.executeUpdate();
-		st2.executeUpdate();
-		st3.executeUpdate();
-		st4.executeUpdate();
-		st5.executeUpdate();
-		st6.executeUpdate();
-		st7.executeUpdate();
-		st8.executeUpdate();
-		st9.executeUpdate();
-		st10.executeUpdate();
-		
-		st.close();
+			PreparedStatement st = conec.prepareStatement("create table Editora(\r\n" + 
+					"	nomeed varchar(30) not null,\r\n" + 
+					"	ided serial primary key,\r\n" + 
+					"	unique (nomeed)\r\n" + 
+					");\r\n" + 
+					"");
+			PreparedStatement st2 = conec.prepareStatement("create table Autor(\r\n" + 
+					"	nomeau varchar(70) not null,\r\n" + 
+					"	idau serial primary key,\r\n" + 
+					"	unique (nomeau)\r\n" + 
+					");");
+			PreparedStatement st3 = conec.prepareStatement("create table Categoria(\r\n" + 
+					"	nomeca varchar(30),\r\n" + 
+					"	idca serial primary key,\r\n" + 
+					"	unique (nomeca)\r\n" + 
+					");");
+			PreparedStatement st4 = conec.prepareStatement("create table Titulo(\r\n" + 
+					"	nomet varchar(90),\r\n" + 
+					"	autor integer references Autor\r\n" + 
+					"	on update cascade\r\n" + 
+					"	on delete cascade,\r\n" + 
+					"	editora integer references Editora\r\n" + 
+					"	on delete cascade\r\n" + 
+					"	on update cascade,\r\n" + 
+					"	idTitulo serial primary key,\r\n" + 
+					"	unique (nomet, autor, editora)\r\n" + 
+					");");
+			PreparedStatement st5 = conec.prepareStatement("\r\n" + 
+					"create table CategoriaPorTitulo(\r\n" + 
+					"	livro integer references Titulo\r\n" + 
+					"	on update cascade\r\n" + 
+					"	on delete cascade,\r\n" + 
+					"	categoria integer references Categoria\r\n" + 
+					"	on update cascade\r\n" + 
+					"	on delete cascade,\r\n" + 
+					"	primary key(livro, categoria)\r\n" + 
+					");\r\n" + 
+					"");
+			PreparedStatement st6 = conec.prepareStatement("create table ExemplarFisico(\r\n" + 
+					"	livro integer references Titulo\r\n" + 
+					"	on update cascade\r\n" + 
+					"	on delete cascade,\r\n" + 
+					"	num_disponiveis integer not null,\r\n" + 
+					"	primary key (livro)\r\n" + 
+					");\r\n" + 
+					"");
+			PreparedStatement st7 = conec.prepareStatement("create table ExemplarOnline(\r\n" + 
+					"	livro integer references Titulo\r\n" + 
+					"	on update cascade\r\n" + 
+					"	on delete cascade,\r\n" + 
+					"	link varchar(150),\r\n" + 
+					"	primary key(livro)\r\n" + 
+					");\r\n" + 
+					"");
+			PreparedStatement st8 = conec.prepareStatement("create table Usuario(\r\n" + 
+					"	idu serial primary key,\r\n" + 
+					"	nome varchar(30) not null unique,\r\n" + 
+					"	senha varchar(30) not null,\r\n" + 
+					"	email varchar(50) not null unique,\r\n" + 
+					"	debito integer not null,\r\n" + 
+					"	adm bool not null\r\n" + 
+					");");
+			PreparedStatement st9 = conec.prepareStatement("create table AluguelAtivo(\r\n" + 
+					"	livro integer references ExemplarFisico\r\n" + 
+					"	on update cascade \r\n" + 
+					"	on delete cascade,\r\n" + 
+					"	usuario integer references Usuario\r\n" + 
+					"	on update cascade\r\n" + 
+					"	on delete cascade,\r\n" + 
+					"	dataEmprestimo date not null,\r\n" + 
+					"	dataDevolucao date not null,\r\n" + 
+					"	unique(livro, usuario)\r\n" + 
+					");");
+			PreparedStatement st10 = conec.prepareStatement("create table AluguelInativo(\r\n" + 
+					"	livro integer references ExemplarFisico \r\n" + 
+					"	on update cascade \r\n" + 
+					"	on delete cascade,\r\n" + 
+					"	usuario integer references Usuario\r\n" + 
+					"	on update cascade\r\n" + 
+					"	on delete cascade,\r\n" + 
+					"	dataEmprestimo date not null,\r\n" + 
+					"	dataDevolucao date not null\r\n" + 
+					");");
+
+			st.executeUpdate();
+			st2.executeUpdate();
+			st3.executeUpdate();
+			st4.executeUpdate();
+			st5.executeUpdate();
+			st6.executeUpdate();
+			st7.executeUpdate();
+			st8.executeUpdate();
+			st9.executeUpdate();
+			st10.executeUpdate();
+
+			st.close();
 		}
 		catch(Exception e) {
 			throw new DatabaseInoperanteException("Erro na criação das tabelas");
@@ -591,8 +646,132 @@ public class Database {
 		{
 			throw new DatabaseInoperanteException("Exemplar fisico não inserido! Erro!");
 		}
-		
+
 	}
 
 
+	public ArrayList<ExemplarOnline> listaExemplarOnlinePorTitulo(String nome) throws DatabaseInoperanteException, SQLException {
+		try {
+			PreparedStatement st = conec.prepareStatement("SELECT nomet,nomeau,idau,nomeed,ided,idtitulo,link FROM Titulo JOIN autor ON(autor=idau) JOIN editora ON (ided=editora) JOIN exemplaronline ON (livro = idtitulo) WHERE nomet LIKE ?");
+			st.setString(1,"%"+ nome+"%");
+			ResultSet rs = null;
+			rs = st.executeQuery();
+			ArrayList<ExemplarOnline> lista = new ArrayList<>();
+			while (rs.next())
+			{
+				lista.add(new ExemplarOnline(rs.getString(1), new Autor(rs.getString(2),rs.getInt(3)),new Editora(rs.getString(4),rs.getInt(5)),rs.getInt(6),rs.getString(7)));
+
+			}
+			return lista;
+		} catch (SQLException e) {
+			throw new DatabaseInoperanteException("Erro na database");
+		}
+	}
+
+	public boolean adicionaAluguelAtivo(int idUser, Titulo livro) {
+		try {
+
+			PreparedStatement st = conec.prepareStatement("INSERT INTO AluguelAtivo(livro, usuario, dataemprestimo, datadevolucao) VALUES (?, ?, ?, ?)");
+			st.setInt(1, livro.getIdTitulo());
+			st.setInt(2, idUser);
+			LocalDate emprestimo = LocalDate.now();
+			LocalDate devolucao = LocalDate.now().plusDays(5); 
+			st.setObject(3, emprestimo);
+			st.setObject(4, devolucao);
+			st.executeUpdate();
+			st.close();
+			// tira um de num_disponiveis do exemplarFisico
+			decrementaNumeroDisponiveis(livro.getIdTitulo());
+			return true;
+		}
+		catch(Exception e)
+		{
+			throw new DatabaseInoperanteException("Exemplar não pode ser alugado! Lembre-se: você só pode ter uma cópia de cada exemplar!");
+		}		
+	}
+
+	private void incrementaNumeroDisponiveis(int livroID) throws SQLException {
+		PreparedStatement st2 = conec.prepareStatement("UPDATE ExemplarFisico set num_Disponiveis = num_Disponiveis+1 where livro= ? ");
+		st2.setInt(1, livroID);
+		st2.executeUpdate();
+		st2.close();
+	}
+
+	private void decrementaNumeroDisponiveis(int livroID) throws SQLException {
+		PreparedStatement st2 = conec.prepareStatement("UPDATE ExemplarFisico set num_Disponiveis = num_Disponiveis-1 where livro= ? ");
+		st2.setInt(1, livroID);
+		st2.executeUpdate();
+		st2.close();
+	}
+	
+	
+	private LocalDate consultaDataDevolucao(int userId, int livroId) throws DatabaseInoperanteException {
+		try {
+			PreparedStatement st = conec.prepareStatement("Select dataemprestimo from AluguelAtivo where usuario = ? and livro = ?");
+			st.setInt(1, userId);
+			st.setInt(2, livroId);
+			LocalDate dataEmprestimo = null;
+			ResultSet rs = null;
+			boolean aluguelFound = false;
+			rs = st.executeQuery();
+			while (rs.next())
+			{
+				aluguelFound = true;
+				dataEmprestimo = rs.getObject(1, LocalDate.class);
+			}
+			st.close();
+			if(aluguelFound)
+				return dataEmprestimo;
+			else 
+				throw new DatabaseInoperanteException("Aluguel não encontrado!");
+		}catch(Exception e) {
+			throw new DatabaseInoperanteException("Erro na database!");
+		}
+	}
+
+	public void devolveLivroAlugado(int userId, int livroId) throws DatabaseInoperanteException {
+		try {
+			PreparedStatement st = conec.prepareStatement("INSERT INTO AluguelInativo(livro, usuario, dataemprestimo, datadevolucao) VALUES (?, ?, ?, ?)");
+			st.setInt(1, livroId);
+			st.setInt(2, userId);
+			LocalDate emprestimo = consultaDataDevolucao(userId, livroId);
+			st.setObject(3, emprestimo);
+			st.setObject(4, LocalDate.now());
+			st.executeUpdate();
+			st.close();
+			incrementaNumeroDisponiveis(livroId);
+			
+			
+			removeAluguelAtivo(userId, livroId);
+			
+		}catch(SQLException e) {
+			throw new DatabaseInoperanteException("Erro na database! Aluguel nao foi devolvido");
+		}
+	}
+
+	private void removeAluguelAtivo(int userId, int livroId) throws SQLException {
+		PreparedStatement st = conec.prepareStatement("delete FROM ALUGUELATIVO WHERE livro = ? and usuario = ?");
+		st.setInt(1, livroId);
+		st.setInt(2, userId);
+		st.executeUpdate();
+		st.close();
+	}
+	
+	public ArrayList<ExemplarAlugado> listaExemplaresDevolvidos(int userID){
+		try {
+			PreparedStatement st = conec.prepareStatement("select nomet, nomeau, dataemprestimo, datadevolucao from AluguelInativo join titulo on (livro=idtitulo) join autor on (autor=idau) where usuario = ? ");
+			st.setInt(1, userID);
+			ResultSet rs = null;
+			rs = st.executeQuery();
+			ArrayList<ExemplarAlugado> lista = new ArrayList<>();
+			while (rs.next())
+			{
+				lista.add(new ExemplarAlugado(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4)) );
+
+			}
+			return lista;
+		} catch (SQLException e) {
+			throw new DatabaseInoperanteException(e.getMessage());
+		}
+	}
 }

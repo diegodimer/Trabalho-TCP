@@ -14,6 +14,20 @@ public class ExemplarAlugado extends Titulo {
 		this.setIdTitulo(id);
 	}
 	
+	public ExemplarAlugado(String nome, Autor autor, Editora editora) {
+		super(nome,autor,editora);
+	}
+
+	public ExemplarAlugado(String nome, Autor autor, Editora editora, int idTitulo) {
+		super(nome,autor,editora,idTitulo);
+	}
+
+	public ExemplarAlugado(String nome, String autor, String dataEmprestimo, String dataDevolucao) {
+		super(nome, autor);
+		this.dataEmprestimo = dataEmprestimo;
+		this.dataDevolucao = dataDevolucao;
+	}
+
 	public void setDataDevolucao(String dataDevolucao) {
 		this.dataDevolucao = dataDevolucao;
 	}

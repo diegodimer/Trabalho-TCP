@@ -84,7 +84,7 @@ public class LoginUI extends JFrame implements ActionListener {
 		btnLogin.setBounds(87, 165, 89, 23);
 		contentPane.add(btnLogin);
 		
-		JLabel memeLogin = new JLabel(new ImageIcon(LoginUI.class.getResource("/Biblioteca/memelogin.png")));
+		JLabel memeLogin = new JLabel(new ImageIcon(LoginUI.class.getResource("/Biblioteca/Imagens/memelogin.png")));
 		memeLogin.setLocation(215, 66);
 		memeLogin.setSize(219, 195);
 		contentPane.add(memeLogin);
