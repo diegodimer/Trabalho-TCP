@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
@@ -32,6 +33,9 @@ public class FuncionarioUI extends JFrame implements ActionListener {
 	private JButton btnDeletarTitulo;
 	private JButton btnDeletarUsuario;
 	private JButton btnAdicionarAutor;
+	
+	private JButton btnDeletarTitulo2;
+	private JTextField CampoId;
 	
 	public FuncionarioUI(Usuario user, Database dataBase) {
 		setResizable(false);
@@ -130,6 +134,8 @@ public class FuncionarioUI extends JFrame implements ActionListener {
 											deletarUsuario();
 											else if(e.getSource() == btnAdicionarAutor)
 												adicionarAutor();
+												else if(e.getSource() == btnDeletarTitulo2)
+													deletarTitulo2();
 		
 
 
@@ -137,8 +143,46 @@ public class FuncionarioUI extends JFrame implements ActionListener {
 	}
 	
 	private void deletarTitulo() {
-		JOptionPane.showMessageDialog(null, "deletar titulo");
+		JFrame janela = new JFrame("Deletar Titulo");
+		janela.setSize(300,400);
+		
+		JPanel Painel = new JPanel();
+		janela.add(Painel);
+		
+		Painel.setLayout(null);
+		JLabel Labeltitulo = new JLabel("Id:");
+		Labeltitulo.setBounds(20,20,150,23);
+		Painel.add(Labeltitulo);
+		
+		CampoId = new JTextField(12);
+		CampoId.setBounds(40,20,45,23);
+		Painel.add(CampoId);
+		
+		btnDeletarTitulo2 = new JButton("Deletar");
+		btnDeletarTitulo2.setBounds(95,20,80,23);
+		btnDeletarTitulo2.addActionListener(this);
+		Painel.add(btnDeletarTitulo2);
+		/*
+		setBounds(100, 100, 489, 300);
+		Painel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		
+		JTextField campoID = new JTextField(5);
+		Painel.add(new JLabel("Id:"));
+		Painel.add(campoID);
+		*/
+		janela.setVisible(true);
+		
 	}
+	
+	private void deletarTitulo2(){
+		String titulo = CampoId.getText();
+		if(dataBase.removeTitulo(Integer.parseInt(titulo))) {
+			JOptionPane.showMessageDialog(null, "titulo removido!");
+		}
+			
+			
+	}
+	
 	private void deletarEditora() {
 		JOptionPane.showMessageDialog(null, "deletar Editora");
 		
