@@ -26,6 +26,10 @@ public class Titulo {
 		this.idTitulo = id;
 	}
 	
+	@Override
+	public String toString() {
+		return "Id: "+ Integer.toString(idTitulo)+ "       Nome: "+nome+"        Editora: "+this.getEditora().getNome()+"        Autor: "+this.getAutor().getNome(); 
+	}
 	public Titulo(String nome, String autor) {
 		this.nome = nome;
 		this.autor = new Autor(autor);

@@ -179,6 +179,78 @@ public class Database {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
+	
+	public ArrayList<Titulo> listaTitulos(String nome) throws DatabaseInoperanteException, SQLException {
+		try {
+			PreparedStatement st = conec.prepareStatement("SELECT nomet,nomeau,idau,nomeed,ided,idtitulo FROM Titulo JOIN autor ON(autor=idau) JOIN editora ON (ided=editora) WHERE nomet LIKE ?;");
+			st.setString(1,"%"+ nome+"%");
+			ResultSet rs = null;
+			rs = st.executeQuery();
+			ArrayList<Titulo> lista = new ArrayList<>();
+			while (rs.next())
+			{
+				lista.add(new Titulo(rs.getString(1), new Autor(rs.getString(2),rs.getInt(3)),new Editora(rs.getString(4),rs.getInt(5)),rs.getInt(6)));
+
+			}
+			return lista;
+		} catch (SQLException e) {
+			throw new DatabaseInoperanteException("Erro na database");
+		}
+	}
+	public ArrayList<Editora> listaEditoras(String nome) throws DatabaseInoperanteException, SQLException {
+		try {
+			PreparedStatement st = conec.prepareStatement("SELECT * FROM editora WHERE nomeed LIKE ?;");
+			st.setString(1,"%"+ nome+"%");
+			ResultSet rs = null;
+			rs = st.executeQuery();
+			ArrayList<Editora> lista = new ArrayList<>();
+			while (rs.next())
+			{
+				lista.add(new Editora(rs.getString(1),rs.getInt(2)));
+
+			}
+			return lista;
+		} catch (SQLException e) {
+			throw new DatabaseInoperanteException("Erro na database");
+		}
+	}
+	public ArrayList<Autor> listaAutores(String nome) throws DatabaseInoperanteException, SQLException {
+		try {
+			PreparedStatement st = conec.prepareStatement("SELECT * FROM autor WHERE nomeau LIKE ?;");
+			st.setString(1,"%"+ nome+"%");
+			ResultSet rs = null;
+			rs = st.executeQuery();
+			ArrayList<Autor> lista = new ArrayList<>();
+			while (rs.next())
+			{
+				lista.add(new Autor(rs.getString(1),rs.getInt(2)));
+
+			}
+			return lista;
+		} catch (SQLException e) {
+			throw new DatabaseInoperanteException("Erro na database");
+		}
+	}
+	public ArrayList<Usuario> listaUsuarios(String nome) throws DatabaseInoperanteException, SQLException {
+		try {
+			PreparedStatement st = conec.prepareStatement("SELECT nome,senha,email,idu FROM usuario WHERE nome LIKE ?;");
+			st.setString(1,"%"+ nome+"%");
+			ResultSet rs = null;
+			rs = st.executeQuery();
+			ArrayList<Usuario> lista = new ArrayList<>();
+			while (rs.next())
+			{
+				lista.add(new Usuario(rs.getString(1),rs.getString(2),rs.getString(3),rs.getInt(4)));
+
+			}
+			return lista;
+		} catch (SQLException e) {
+			throw new DatabaseInoperanteException("Erro na database");
+		}
+	}
+	
+	
+	
 	public ArrayList<ExemplarFisico> listaExemplaresDisponiveisPorCategoria(String nome) throws DatabaseInoperanteException, SQLException {
 		try {
 			PreparedStatement st = conec.prepareStatement("SELECT nomet,nomeau,idau,nomeed,ided,idtitulo,num_disponiveis FROM Titulo JOIN autor ON(autor=idau) JOIN editora ON (ided=editora) JOIN exemplarfisico ON (livro = idtitulo) JOIN categoriaportitulo ON (idtitulo = categoriaportitulo.livro) JOIN categoria ON (categoriaportitulo.categoria =idca) WHERE nomeca LIKE ?;");
@@ -516,7 +588,19 @@ public class Database {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
-
+	public boolean removeUsuario(int idu) {
+		try {
+			PreparedStatement st = conec.prepareStatement("DELETE FROM usuario WHERE idu = ?");
+			st.setInt(1, idu);
+			st.executeUpdate();
+			st.close();
+			return true;
+		}
+		catch(Exception e)
+		{
+			throw new DatabaseInoperanteException("Erro na database");
+		}
+	}
 
 	void closeDatabase() throws SQLException {
 		conec.close();
@@ -645,6 +729,22 @@ public class Database {
 		catch(Exception e)
 		{
 			throw new DatabaseInoperanteException("Exemplar fisico não inserido! Erro!");
+		}
+
+	}
+	public boolean addExemplarOnline(int idTitulo, String link) {
+		try {
+			PreparedStatement st = conec.prepareStatement("INSERT INTO ExemplarOnline(livro, link) VALUES (?, ?)");
+
+			st.setInt(1, idTitulo);
+			st.setString(2, link);			
+			st.executeUpdate();
+			st.close();
+			return true;
+		}
+		catch(Exception e)
+		{
+			throw new DatabaseInoperanteException("Exemplar online não inserido! Erro!");
 		}
 
 	}

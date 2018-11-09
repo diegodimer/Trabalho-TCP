@@ -213,10 +213,17 @@ public class DatabaseTest {
 	public void testRemoveEditora() {
 	//	assertTrue(testeDB.removeEditora(6));
 	}
-	
+	@Test
+	public void testRemoveUsuario() {
+	//	assertTrue(testeDB.removeUsuario(3));
+	}
 	//@Test
 	public void testAddExemplarFisico() {
 		assertTrue(testeDB.addExemplarFisico(3, 5));
+	}
+	@Test
+	public void testAddExemplarOnline() {
+	//	assertTrue(testeDB.addExemplarOnline(3,"livroonline.com"));
 	}
 	
 	@Test
@@ -254,6 +261,28 @@ public class DatabaseTest {
 	@Test
 	public void testlistaExemplaresDevolvidos() {
 		ArrayList<ExemplarAlugado> lista = testeDB.listaExemplaresDevolvidos(1);
-		System.out.println(lista.get(0).getNome());
+	//	System.out.println(lista.get(0).getNome());
 	}
+	@Test
+	public void testlistaTitulos() throws DatabaseInoperanteException, SQLException {
+		ArrayList<Titulo> lista = testeDB.listaTitulos("La");
+		//System.out.println(lista.get(0).getNome());
+	}
+	
+	@Test
+	public void testlistaEditoras() throws DatabaseInoperanteException, SQLException {
+		ArrayList<Editora> lista = testeDB.listaEditoras("R");
+	//	System.out.println(lista.get(0).getNome());
+	}
+	@Test
+	public void testlistaAutores() throws DatabaseInoperanteException, SQLException {
+		ArrayList<Autor> lista = testeDB.listaAutores("J");
+	//	System.out.println(lista.get(0).getNome());
+	}
+	@Test
+	public void testlistaUsuarios() throws DatabaseInoperanteException, SQLException {
+		ArrayList<Usuario> lista = testeDB.listaUsuarios("t");
+		System.out.println(lista.get(0).toString());
+	}
+	
 }

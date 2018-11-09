@@ -16,6 +16,11 @@ public class Editora {
 		this.id = id;
 	}
 	
+	@Override
+	public String toString() {
+		return "Id: "+ Integer.toString(id)+ "       Nome: "+nome; 
+	}
+	
 	public String getNome() {
 		return nome;
 	}

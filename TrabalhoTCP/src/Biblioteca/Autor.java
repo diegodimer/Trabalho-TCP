@@ -16,7 +16,9 @@ public class Autor {
 		this.nome = nome;
 		this.id = id;
 	}
-	
+	public String toString() {
+		return "Id: "+ Integer.toString(id)+ "       Nome: "+nome; 
+	}
 	public String getNome() {
 		return nome;
 	}

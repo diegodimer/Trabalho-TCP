@@ -59,6 +59,19 @@ public class Usuario {
 		this.setADM(false);
 		this.alugueis=new ArrayList<>();
 	}
+	
+	public Usuario(String nome, String senha, String email, int userid) {
+		this.username = nome;
+		this.password = senha;
+		this.email = email;
+		this.debito = 0;
+		this.setADM(false);
+		this.alugueis=new ArrayList<>();
+		this.userid = userid;
+	}
+	public String toString() {
+		return "Id: "+ Integer.toString(userid)+ "       Nome: "+username; 
+	}
 
 	public void setEmail(String email) {
 		this.email = email;
