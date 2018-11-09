@@ -2,6 +2,7 @@ package Biblioteca;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -20,11 +21,10 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JTextPane;
-import javax.swing.JTextArea;
 
 @SuppressWarnings("serial")
 public class UsuarioUI extends JFrame implements ActionListener {
@@ -64,6 +64,7 @@ public class UsuarioUI extends JFrame implements ActionListener {
 	private HashMap<Integer, String> listaDeLinksLivrosBuscados;
 
 	public UsuarioUI(Usuario user, Database dataBase) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(UsuarioUI.class.getResource("/Biblioteca/Imagens/icone.png")));
 		setResizable(false);
 		setTitle("Interface do Usuario");
 		this.dataBase = dataBase;
@@ -76,14 +77,14 @@ public class UsuarioUI extends JFrame implements ActionListener {
 		}
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 506, 396);
+		setBounds(100, 100, 536, 408);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
 		scrollAlugueisAtivos = new JScrollPane();
-		scrollAlugueisAtivos.setBounds(27, 250, 431, 96);
+		scrollAlugueisAtivos.setBounds(27, 250, 493, 118);
 		contentPane.add(scrollAlugueisAtivos);
 
 		panelComAlugueis = new JPanel();
@@ -98,7 +99,7 @@ public class UsuarioUI extends JFrame implements ActionListener {
 		contentPane.add(lblAlugueisAtivos);
 
 		JSeparator separator = new JSeparator();
-		separator.setBounds(27, 210, 431, 29);
+		separator.setBounds(27, 210, 475, 29);
 		contentPane.add(separator);
 
 		btnAlugarNovoLivro = new JButton("Alugar novo livro");
@@ -117,7 +118,7 @@ public class UsuarioUI extends JFrame implements ActionListener {
 		contentPane.add(btnHistoricoDeEmprestimos);
 
 		scrollBusca = new JScrollPane();
-		scrollBusca.setBounds(188, 65, 274, 131);
+		scrollBusca.setBounds(188, 65, 314, 125);
 		contentPane.add(scrollBusca);
 
 		paneldaBusca = new JPanel();
@@ -139,7 +140,7 @@ public class UsuarioUI extends JFrame implements ActionListener {
 
 		btnBuscar = new JButton("Buscar");
 		btnBuscar.addActionListener(this);
-		btnBuscar.setBounds(346, 31, 89, 23);
+		btnBuscar.setBounds(331, 31, 89, 23);
 		contentPane.add(btnBuscar);
 
 		JPanel panelRadioButtons = new JPanel();
@@ -174,8 +175,13 @@ public class UsuarioUI extends JFrame implements ActionListener {
 		seletorTipoDeLivro.setBackground(Color.WHITE);
 		seletorTipoDeLivro.insertItemAt("Livro Físico", 0);
 		seletorTipoDeLivro.insertItemAt("Livro Online", 1);
-		seletorTipoDeLivro.setBounds(347, 10, 88, 20);
+		seletorTipoDeLivro.setBounds(432, 34, 88, 20);
 		contentPane.add(seletorTipoDeLivro);
+		
+		JLabel lblUsuario = new JLabel("Usuario: "+ user.getUsername() + " débito de: " + user.getDebito() + " reais" );
+		lblUsuario.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		lblUsuario.setBounds(346, 13, 205, 14);
+		contentPane.add(lblUsuario);
 
 
 	}

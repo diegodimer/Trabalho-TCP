@@ -1,6 +1,7 @@
 package Biblioteca;
 
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -12,8 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
 
 @SuppressWarnings("serial")
 public class RegistroUI extends JFrame implements ActionListener {
@@ -28,6 +27,7 @@ public class RegistroUI extends JFrame implements ActionListener {
 	private JButton btnRegistrar;
 	
 	public RegistroUI(Database dataBase) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(RegistroUI.class.getResource("/Biblioteca/Imagens/icone.png")));
 		setResizable(false);
 		setTitle("Registrar");
 		this.dataBase = dataBase;
