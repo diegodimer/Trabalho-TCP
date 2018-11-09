@@ -1,10 +1,10 @@
 package Biblioteca;
 
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -29,6 +29,7 @@ public class LoginUI extends JFrame implements ActionListener {
 	 * Create the frame.
 	 */
 	public LoginUI() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(LoginUI.class.getResource("/Biblioteca/Imagens/icone.png")));
 		setResizable(false);
 		database = new Database(); // abre a database (por isso demora um pouco pra aparecer a tela)
 		
