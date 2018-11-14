@@ -30,7 +30,7 @@ import javax.swing.border.EmptyBorder;
 public class UsuarioUI extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
-	private Database dataBase;
+	private DatabaseInterface dataBase;
 	private Usuario user;
 
 	// painel com alugueis ativos
@@ -63,7 +63,7 @@ public class UsuarioUI extends JFrame implements ActionListener {
 	private JComboBox<String> seletorTipoDeLivro;
 	private HashMap<Integer, String> listaDeLinksLivrosBuscados;
 
-	public UsuarioUI(Usuario user, Database dataBase) {
+	public UsuarioUI(Usuario user, DatabaseInterface dataBase) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(UsuarioUI.class.getResource("/Biblioteca/Imagens/icone.png")));
 		setResizable(false);
 		setTitle("Interface do Usuario");
@@ -72,7 +72,7 @@ public class UsuarioUI extends JFrame implements ActionListener {
 
 		try {
 			dataBase.listaAlgueisdoUsuario(user);
-		} catch (DatabaseInoperanteException | SQLException e) {
+		} catch (DatabaseInoperanteException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
 
@@ -204,7 +204,7 @@ public class UsuarioUI extends JFrame implements ActionListener {
 							ArrayList<ExemplarOnline> resultadoBusca = dataBase.listaExemplarOnlinePorTitulo(conteudoBuscado.getText());
 							listaResultadoBuscaOnline(resultadoBusca);
 						}
-					} catch (DatabaseInoperanteException | SQLException e1) {
+					} catch (DatabaseInoperanteException e1) {
 						JOptionPane.showMessageDialog(null, e1.getMessage());
 					}
 
@@ -219,7 +219,7 @@ public class UsuarioUI extends JFrame implements ActionListener {
 						{
 							//	ArrayList<ExemplarOnline> resultadoBusca;
 						}
-					} catch (DatabaseInoperanteException | SQLException e1) {
+					} catch (DatabaseInoperanteException e1) {
 						JOptionPane.showMessageDialog(null, e1.getMessage());
 					}
 				}
@@ -233,7 +233,7 @@ public class UsuarioUI extends JFrame implements ActionListener {
 						{
 							//	ArrayList<ExemplarOnline> resultadoBusca;
 						}
-					} catch (DatabaseInoperanteException | SQLException e1) {
+					} catch (DatabaseInoperanteException e1) {
 						JOptionPane.showMessageDialog(null, e1.getMessage());
 					}
 
@@ -248,7 +248,7 @@ public class UsuarioUI extends JFrame implements ActionListener {
 						{
 							//	ArrayList<ExemplarOnline> resultadoBusca;
 						}
-					} catch (DatabaseInoperanteException | SQLException e1) {
+					} catch (DatabaseInoperanteException e1) {
 						JOptionPane.showMessageDialog(null, e1.getMessage());
 					}
 				}
@@ -328,7 +328,7 @@ public class UsuarioUI extends JFrame implements ActionListener {
 		try {
 			dataBase.listaAlgueisdoUsuario(user);
 			alugueisDoUsuario = user.getAlugueis();
-		} catch (DatabaseInoperanteException | SQLException e) {
+		} catch (DatabaseInoperanteException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
 		listaAlugueisAtivos = new ArrayList<>();
@@ -411,7 +411,7 @@ public class UsuarioUI extends JFrame implements ActionListener {
 			dataBase.adicionaAluguelAtivo(user.getUserid(), livroParaAlugar );
 			listaAlugueisAtivos();
 			JOptionPane.showMessageDialog(null, "Aluguel Realizado com Sucesso!!");
-		} catch (TituloNaoEncontradoException | DatabaseInoperanteException e) {
+		} catch (DatabaseInoperanteException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
 

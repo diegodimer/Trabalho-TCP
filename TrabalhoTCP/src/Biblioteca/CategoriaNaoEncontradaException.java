@@ -1,6 +1,6 @@
 package Biblioteca;
 
-public class CategoriaNaoEncontradaException extends Exception{
+public class CategoriaNaoEncontradaException extends DatabaseInoperanteException{
 
 	/**
 	 * 

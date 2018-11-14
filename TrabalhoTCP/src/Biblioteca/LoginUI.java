@@ -23,7 +23,7 @@ public class LoginUI extends JFrame implements ActionListener {
 	private JTextField usernameField;
 	private JPasswordField passwordField;
 	private JButton btnLogin;
-	private Database database;
+	private DatabaseInterface database;
 
 	/**
 	 * Create the frame.
@@ -32,7 +32,6 @@ public class LoginUI extends JFrame implements ActionListener {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(LoginUI.class.getResource("/Biblioteca/Imagens/icone.png")));
 		setResizable(false);
 		database = new Database(); // abre a database (por isso demora um pouco pra aparecer a tela)
-		
 		setTitle("Tela de login");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -120,7 +119,7 @@ public class LoginUI extends JFrame implements ActionListener {
 				regularUserFrame.setVisible(true);
 				this.dispose(); // fecha esse frame de login
 					
-			} catch (DatabaseInoperanteException | UsuarioNaoEncontradoException e1) {
+			} catch (DatabaseInoperanteException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage()); // erro mostra a mensagem daquela exceção
 			}
 			

@@ -22,11 +22,11 @@ public class RegistroUI extends JFrame implements ActionListener {
 	private JTextField txtEmail;
 	private JPasswordField pwdSenha;
 	private JPasswordField pwdSenhaconfirmacao;
-	private Database dataBase;
+	private DatabaseInterface dataBase;
 	// botao
 	private JButton btnRegistrar;
 	
-	public RegistroUI(Database dataBase) {
+	public RegistroUI(DatabaseInterface dataBase) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(RegistroUI.class.getResource("/Biblioteca/Imagens/icone.png")));
 		setResizable(false);
 		setTitle("Registrar");

@@ -1,6 +1,6 @@
 package Biblioteca;
 
-public class EditoraNaoEncontradaException extends Exception{
+public class EditoraNaoEncontradaException extends DatabaseInoperanteException{
 
 
 	/**

@@ -8,14 +8,16 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 
-public class Database {
+public class Database implements DatabaseInterface {
 	private String usuario;
 	private String senha;
 	private String url;
-	private Connection conec;
+	private Connection conec = conectaDatabase();
 
-	// esse método construtor faz a conexão com o banco de dados. Até então eu fiz só printar se ta tudo ok
-	Database() {
+
+	//singleton
+	private Connection conectaDatabase(){
+		Connection conec;
 		url= "jdbc:postgresql://ec2-107-21-98-165.compute-1.amazonaws.com:5432/d3bt62m75hbk3k";
 		usuario= "eiyrmkkfmwgvay";
 		senha = "314fa4d9877c8f5f19446f16ec2bbde64767e9e348d2eaa9851e87006959b978";
@@ -23,12 +25,20 @@ public class Database {
 		try {
 			Class.forName("org.postgresql.Driver");
 			conec = DriverManager.getConnection(url, usuario, senha);
-			System.out.println("Conexão feita!");
+			return conec;
 		} catch (Exception e) {
 			throw new DatabaseInoperanteException("Erro na abertura da database");
 		}
-	}
 
+	}
+	
+	Database() {
+			}
+
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#findUser(java.lang.String, java.lang.String)
+	 */
+	@Override
 	public Usuario findUser(String nome, String senha) throws UsuarioNaoEncontradoException, DatabaseInoperanteException {
 
 		PreparedStatement st;
@@ -64,6 +74,10 @@ public class Database {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#addUser(Biblioteca.Usuario)
+	 */
+	@Override
 	public boolean addUser(Usuario user) throws DatabaseInoperanteException {
 		try {
 			PreparedStatement st = conec.prepareStatement("INSERT INTO Usuario(nome,senha,email,debito,adm) VALUES (?, ?, ?, ?, ?)");
@@ -82,6 +96,10 @@ public class Database {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#tornaUserAdm(java.lang.String)
+	 */
+	@Override
 	public void tornaUserAdm(String nomeAdm) throws DatabaseInoperanteException, UsuarioNaoEncontradoException {
 		int i;
 
@@ -103,7 +121,11 @@ public class Database {
 
 
 	}
-	public void listaAlgueisdoUsuario(Usuario user) throws DatabaseInoperanteException, SQLException {
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#listaAlgueisdoUsuario(Biblioteca.Usuario)
+	 */
+	@Override
+	public void listaAlgueisdoUsuario(Usuario user) throws DatabaseInoperanteException {
 		try {
 			user.resetaAlugueis();
 			PreparedStatement st = conec.prepareStatement("SELECT nomet, idtitulo, nomeau, idau, ided, nomeed, datadevolucao, dataemprestimo "
@@ -126,7 +148,11 @@ public class Database {
 		}
 	}
 
-	public ArrayList<ExemplarFisico> listaExemplaresDisponiveis(String nome) throws DatabaseInoperanteException, SQLException {
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#listaExemplaresDisponiveis(java.lang.String)
+	 */
+	@Override
+	public ArrayList<ExemplarFisico> listaExemplaresDisponiveis(String nome) throws DatabaseInoperanteException {
 		try {
 			PreparedStatement st = conec.prepareStatement("SELECT nomet,nomeau,idau,nomeed,ided,idtitulo,num_disponiveis FROM Titulo JOIN autor ON(autor=idau) JOIN editora ON (ided=editora) JOIN exemplarfisico ON (livro = idtitulo) WHERE nomet LIKE ?");
 			st.setString(1,"%"+ nome+"%");
@@ -145,7 +171,11 @@ public class Database {
 	}
 
 
-	public ArrayList<ExemplarFisico> listaExemplaresDisponiveisPorAutor(String nome) throws DatabaseInoperanteException, SQLException {
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#listaExemplaresDisponiveisPorAutor(java.lang.String)
+	 */
+	@Override
+	public ArrayList<ExemplarFisico> listaExemplaresDisponiveisPorAutor(String nome) throws DatabaseInoperanteException {
 		try {
 			PreparedStatement st = conec.prepareStatement("SELECT nomet,nomeau,idau,nomeed,ided,idtitulo,num_disponiveis FROM Titulo JOIN autor ON(autor=idau) JOIN editora ON (ided=editora) JOIN exemplarfisico ON (livro = idtitulo) WHERE nomeau LIKE ?");
 			st.setString(1,"%"+ nome+"%");
@@ -162,7 +192,11 @@ public class Database {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
-	public ArrayList<ExemplarFisico> listaExemplaresDisponiveisPorEditora(String nome) throws DatabaseInoperanteException, SQLException {
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#listaExemplaresDisponiveisPorEditora(java.lang.String)
+	 */
+	@Override
+	public ArrayList<ExemplarFisico> listaExemplaresDisponiveisPorEditora(String nome) throws DatabaseInoperanteException {
 		try {
 			PreparedStatement st = conec.prepareStatement("SELECT nomet,nomeau,idau,nomeed,ided,idtitulo,num_disponiveis FROM Titulo JOIN autor ON(autor=idau) JOIN editora ON (ided=editora) JOIN exemplarfisico ON (livro = idtitulo) WHERE nomeed LIKE ?");
 			st.setString(1,"%"+ nome+"%");
@@ -180,7 +214,11 @@ public class Database {
 		}
 	}
 	
-	public ArrayList<Titulo> listaTitulos(String nome) throws DatabaseInoperanteException, SQLException {
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#listaTitulos(java.lang.String)
+	 */
+	@Override
+	public ArrayList<Titulo> listaTitulos(String nome) throws DatabaseInoperanteException{
 		try {
 			PreparedStatement st = conec.prepareStatement("SELECT nomet,nomeau,idau,nomeed,ided,idtitulo FROM Titulo JOIN autor ON(autor=idau) JOIN editora ON (ided=editora) WHERE nomet LIKE ?;");
 			st.setString(1,"%"+ nome+"%");
@@ -197,7 +235,11 @@ public class Database {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
-	public ArrayList<Editora> listaEditoras(String nome) throws DatabaseInoperanteException, SQLException {
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#listaEditoras(java.lang.String)
+	 */
+	@Override
+	public ArrayList<Editora> listaEditoras(String nome) throws DatabaseInoperanteException {
 		try {
 			PreparedStatement st = conec.prepareStatement("SELECT * FROM editora WHERE nomeed LIKE ?;");
 			st.setString(1,"%"+ nome+"%");
@@ -214,7 +256,11 @@ public class Database {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
-	public ArrayList<Autor> listaAutores(String nome) throws DatabaseInoperanteException, SQLException {
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#listaAutores(java.lang.String)
+	 */
+	@Override
+	public ArrayList<Autor> listaAutores(String nome) throws DatabaseInoperanteException{
 		try {
 			PreparedStatement st = conec.prepareStatement("SELECT * FROM autor WHERE nomeau LIKE ?;");
 			st.setString(1,"%"+ nome+"%");
@@ -231,7 +277,11 @@ public class Database {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
-	public ArrayList<Usuario> listaUsuarios(String nome) throws DatabaseInoperanteException, SQLException {
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#listaUsuarios(java.lang.String)
+	 */
+	@Override
+	public ArrayList<Usuario> listaUsuarios(String nome) throws DatabaseInoperanteException{
 		try {
 			PreparedStatement st = conec.prepareStatement("SELECT nome,senha,email,idu FROM usuario WHERE nome LIKE ?;");
 			st.setString(1,"%"+ nome+"%");
@@ -251,7 +301,11 @@ public class Database {
 	
 	
 	
-	public ArrayList<ExemplarFisico> listaExemplaresDisponiveisPorCategoria(String nome) throws DatabaseInoperanteException, SQLException {
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#listaExemplaresDisponiveisPorCategoria(java.lang.String)
+	 */
+	@Override
+	public ArrayList<ExemplarFisico> listaExemplaresDisponiveisPorCategoria(String nome) throws DatabaseInoperanteException{
 		try {
 			PreparedStatement st = conec.prepareStatement("SELECT nomet,nomeau,idau,nomeed,ided,idtitulo,num_disponiveis FROM Titulo JOIN autor ON(autor=idau) JOIN editora ON (ided=editora) JOIN exemplarfisico ON (livro = idtitulo) JOIN categoriaportitulo ON (idtitulo = categoriaportitulo.livro) JOIN categoria ON (categoriaportitulo.categoria =idca) WHERE nomeca LIKE ?;");
 			st.setString(1,"%"+ nome+"%");
@@ -269,7 +323,11 @@ public class Database {
 		}
 	}
 
-	public ExemplarFisico findExemplarFisico (int idTitulo) throws DatabaseInoperanteException, SQLException {
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#findExemplarFisico(int)
+	 */
+	@Override
+	public ExemplarFisico findExemplarFisico (int idTitulo) throws DatabaseInoperanteException {
 		try {
 			PreparedStatement st = conec.prepareStatement("SELECT nomet,nomeau,idau,nomeed,ided,idtitulo,num_disponiveis FROM Titulo JOIN autor ON(autor=idau) JOIN editora ON (ided=editora) JOIN exemplarfisico ON (livro = idtitulo) where idtitulo = ? ");
 			st.setInt(1, idTitulo);
@@ -291,6 +349,10 @@ public class Database {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#addAutor(Biblioteca.Autor)
+	 */
+	@Override
 	public boolean addAutor(Autor autor) {
 		try {
 			PreparedStatement st = conec.prepareStatement("INSERT INTO Autor(nomeau) VALUES (?)");
@@ -309,6 +371,10 @@ public class Database {
 
 
 
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#findAutor(java.lang.String)
+	 */
+	@Override
 	public Autor findAutor(String nome) throws AutorNaoEncontradoException, DatabaseInoperanteException{
 		PreparedStatement st;
 		boolean autorFound = false;
@@ -335,6 +401,10 @@ public class Database {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#addCategoriaPorTitulo(int, int)
+	 */
+	@Override
 	public boolean addCategoriaPorTitulo(int idtitulo, int idcat) {
 		try {
 			PreparedStatement st = conec.prepareStatement("INSERT INTO CategoriaPorTitulo(livro,categoria) VALUES (?,?)");
@@ -351,6 +421,10 @@ public class Database {
 	}
 
 
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#addEditora(Biblioteca.Editora)
+	 */
+	@Override
 	public boolean addEditora(Editora ed) throws DatabaseInoperanteException{
 		try {
 			PreparedStatement st = conec.prepareStatement("INSERT INTO Editora(nomeed) VALUES (?)");
@@ -364,6 +438,10 @@ public class Database {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#findEditora(java.lang.String)
+	 */
+	@Override
 	public Editora findEditora(String nome) throws EditoraNaoEncontradaException, DatabaseInoperanteException{
 		PreparedStatement st;
 		boolean UserFound = false;
@@ -392,6 +470,10 @@ public class Database {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#addCategoria(Biblioteca.Categoria)
+	 */
+	@Override
 	public boolean addCategoria(Categoria cat) throws DatabaseInoperanteException{
 		try {
 			PreparedStatement st = conec.prepareStatement("INSERT INTO categoria(nomeca) VALUES (?)");
@@ -405,6 +487,10 @@ public class Database {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#findCategoria(java.lang.String)
+	 */
+	@Override
 	public Categoria findCategoria(String nome) throws CategoriaNaoEncontradaException, DatabaseInoperanteException{
 		PreparedStatement st;
 		boolean UserFound = false;
@@ -434,11 +520,12 @@ public class Database {
 	}
 
 
-	public boolean atualizaUsuario(Usuario user) {
-		return false;
 
-	}
 
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#addTitulo(Biblioteca.Titulo)
+	 */
+	@Override
 	public boolean addTitulo(Titulo livro) {
 		try {
 			PreparedStatement st = conec.prepareStatement("INSERT INTO titulo(nomet,autor,editora) VALUES (?, ?, ?)");
@@ -460,6 +547,10 @@ public class Database {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#findTitulo(java.lang.String)
+	 */
+	@Override
 	public Titulo findTitulo(String nome) throws TituloNaoEncontradoException {
 		PreparedStatement st;
 		boolean UserFound = false;
@@ -488,6 +579,10 @@ public class Database {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#findTitulo(Biblioteca.Titulo)
+	 */
+	@Override
 	public Titulo findTitulo(Titulo titulo) throws TituloNaoEncontradoException {
 		PreparedStatement st;
 		boolean titleFound = false;
@@ -519,6 +614,10 @@ public class Database {
 	}
 
 
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#findTitulo(int)
+	 */
+	@Override
 	public Titulo findTitulo(int idTitulo) throws TituloNaoEncontradoException {
 		PreparedStatement st;
 		boolean titleFound = false;
@@ -549,6 +648,10 @@ public class Database {
 
 
 
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#removeTitulo(int)
+	 */
+	@Override
 	public boolean removeTitulo(int idtitulo) {
 		try {
 			PreparedStatement st = conec.prepareStatement("DELETE FROM titulo WHERE idtitulo = ?");
@@ -562,6 +665,10 @@ public class Database {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#removeAutor(int)
+	 */
+	@Override
 	public boolean removeAutor(int idau) {
 		try {
 			PreparedStatement st = conec.prepareStatement("DELETE FROM autor WHERE idau = ?");
@@ -575,6 +682,10 @@ public class Database {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#removeEditora(int)
+	 */
+	@Override
 	public boolean removeEditora(int ided) {
 		try {
 			PreparedStatement st = conec.prepareStatement("DELETE FROM editora WHERE ided = ?");
@@ -588,6 +699,10 @@ public class Database {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#removeUsuario(int)
+	 */
+	@Override
 	public boolean removeUsuario(int idu) {
 		try {
 			PreparedStatement st = conec.prepareStatement("DELETE FROM usuario WHERE idu = ?");
@@ -716,6 +831,10 @@ public class Database {
 	}
 
 
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#addExemplarFisico(int, int)
+	 */
+	@Override
 	public boolean addExemplarFisico(int idTitulo, int numDisponiveis) {
 		try {
 			PreparedStatement st = conec.prepareStatement("INSERT INTO ExemplarFisico(livro, num_disponiveis) VALUES (?, ?)");
@@ -732,6 +851,10 @@ public class Database {
 		}
 
 	}
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#addExemplarOnline(int, java.lang.String)
+	 */
+	@Override
 	public boolean addExemplarOnline(int idTitulo, String link) {
 		try {
 			PreparedStatement st = conec.prepareStatement("INSERT INTO ExemplarOnline(livro, link) VALUES (?, ?)");
@@ -750,7 +873,11 @@ public class Database {
 	}
 
 
-	public ArrayList<ExemplarOnline> listaExemplarOnlinePorTitulo(String nome) throws DatabaseInoperanteException, SQLException {
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#listaExemplarOnlinePorTitulo(java.lang.String)
+	 */
+	@Override
+	public ArrayList<ExemplarOnline> listaExemplarOnlinePorTitulo(String nome) throws DatabaseInoperanteException {
 		try {
 			PreparedStatement st = conec.prepareStatement("SELECT nomet,nomeau,idau,nomeed,ided,idtitulo,link FROM Titulo JOIN autor ON(autor=idau) JOIN editora ON (ided=editora) JOIN exemplaronline ON (livro = idtitulo) WHERE nomet LIKE ?");
 			st.setString(1,"%"+ nome+"%");
@@ -768,6 +895,10 @@ public class Database {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#adicionaAluguelAtivo(int, Biblioteca.Titulo)
+	 */
+	@Override
 	public boolean adicionaAluguelAtivo(int idUser, Titulo livro) {
 		try {
 
@@ -829,6 +960,10 @@ public class Database {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#devolveLivroAlugado(int, int)
+	 */
+	@Override
 	public void devolveLivroAlugado(int userId, int livroId) throws DatabaseInoperanteException {
 		try {
 			PreparedStatement st = conec.prepareStatement("INSERT INTO AluguelInativo(livro, usuario, dataemprestimo, datadevolucao) VALUES (?, ?, ?, ?)");
@@ -857,6 +992,10 @@ public class Database {
 		st.close();
 	}
 	
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#listaExemplaresDevolvidos(int)
+	 */
+	@Override
 	public ArrayList<ExemplarAlugado> listaExemplaresDevolvidos(int userID){
 		try {
 			PreparedStatement st = conec.prepareStatement("select nomet, nomeau, dataemprestimo, datadevolucao from AluguelInativo join titulo on (livro=idtitulo) join autor on (autor=idau) where usuario = ? ");

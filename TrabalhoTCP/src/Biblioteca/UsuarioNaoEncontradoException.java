@@ -1,6 +1,6 @@
 package Biblioteca;
 
-public class UsuarioNaoEncontradoException extends Exception {
+public class UsuarioNaoEncontradoException extends DatabaseInoperanteException {
 
 	public UsuarioNaoEncontradoException(String string) {
 		super(string);

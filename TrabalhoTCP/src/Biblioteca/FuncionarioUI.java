@@ -24,9 +24,7 @@ import javax.swing.border.EmptyBorder;
 public class FuncionarioUI extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
-	private Database dataBase;
-	private Usuario user;
-	
+	private DatabaseInterface dataBase;
 	private JButton btnMakeAdm;
 	private JButton btnAdicionaEditora;
 	private JButton btnAdicionaCategoria;
@@ -67,10 +65,9 @@ public class FuncionarioUI extends JFrame implements ActionListener {
 	private JPanel panelUsuario;
 	private JTextField CampoNomeUsuario;
 	
-	public FuncionarioUI(Usuario user, Database dataBase) {
+	public FuncionarioUI(Usuario user, DatabaseInterface dataBase) {
 		setResizable(false);
 		this.dataBase = dataBase;
-		this.user = user;
 		setTitle("Biblioteca manager");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 213, 363);
@@ -255,8 +252,6 @@ public class FuncionarioUI extends JFrame implements ActionListener {
 			
 		} catch (DatabaseInoperanteException e) {
 			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace(); 
 		}
 	}
 	
@@ -337,8 +332,6 @@ public class FuncionarioUI extends JFrame implements ActionListener {
 			
 		} catch (DatabaseInoperanteException e) {
 			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace(); 
 		}
 	}
 	
@@ -413,8 +406,6 @@ public class FuncionarioUI extends JFrame implements ActionListener {
 			
 		} catch (DatabaseInoperanteException e) {
 			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace(); 
 		}
 	}
 	private void deletarUsuario() {
@@ -487,8 +478,6 @@ public class FuncionarioUI extends JFrame implements ActionListener {
 			
 		} catch (DatabaseInoperanteException e) {
 			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace(); 
 		}
 	}
 	
@@ -523,7 +512,7 @@ public class FuncionarioUI extends JFrame implements ActionListener {
 	    		  dataBase.addExemplarFisico(tituloEncontrado.getIdTitulo(), Integer.parseInt(numDisponiveisField.getText()));
 	    		  JOptionPane.showMessageDialog(null, "Livro adicionado com sucesso!");
 	    	  }
-	    	  catch(AutorNaoEncontradoException | TituloNaoEncontradoException | EditoraNaoEncontradaException | DatabaseInoperanteException e1)
+	    	  catch(DatabaseInoperanteException e1)
 	    	  {
 	    		  JOptionPane.showMessageDialog(null, e1.getMessage() + " Lembre que eu sou case sensitive!!!!");
 	    	  }
@@ -561,7 +550,7 @@ public class FuncionarioUI extends JFrame implements ActionListener {
 	    		  dataBase.addExemplarOnline(tituloEncontrado.getIdTitulo(),linkField.getText());
 	    		  JOptionPane.showMessageDialog(null, "Livro adicionado com sucesso!");
 	    	  }
-	    	  catch(AutorNaoEncontradoException | TituloNaoEncontradoException | EditoraNaoEncontradaException | DatabaseInoperanteException e1)
+	    	  catch(DatabaseInoperanteException e1)
 	    	  {
 	    		  JOptionPane.showMessageDialog(null, e1.getMessage() + " Lembre que eu sou case sensitive!!!!");
 	    	  }
@@ -597,7 +586,7 @@ public class FuncionarioUI extends JFrame implements ActionListener {
 	    		  dataBase.addTitulo(tituloAdicionado);
 	    		  JOptionPane.showMessageDialog(null, "Livro adicionado com sucesso!");
 	    	  }
-	    	  catch(AutorNaoEncontradoException | EditoraNaoEncontradaException | DatabaseInoperanteException e1)
+	    	  catch(DatabaseInoperanteException e1)
 	    	  {
 	    		  JOptionPane.showMessageDialog(null, e1.getMessage() + " Lembre que eu sou case sensitive!!!!");
 	    	  }
@@ -679,7 +668,7 @@ public class FuncionarioUI extends JFrame implements ActionListener {
 	    		  dataBase.tornaUserAdm(nomeField.getText());
 	    		  JOptionPane.showMessageDialog(null, "Operação concluida com sucesso!");
 	    	  }
-	    	  catch(DatabaseInoperanteException | UsuarioNaoEncontradoException e1)
+	    	  catch(DatabaseInoperanteException e1)
 	    	  {
 	    		  JOptionPane.showMessageDialog(null, e1.getMessage() + " Lembre que eu sou case sensitive!!!!");
 	    	  }
