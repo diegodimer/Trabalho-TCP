@@ -5,7 +5,6 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -27,7 +26,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 @SuppressWarnings("serial")
-public class UsuarioUI extends JFrame implements ActionListener {
+public class UsuarioUI extends JFrame implements ActionListener, UsuarioInterface {
 
 	private JPanel contentPane;
 	private DatabaseInterface dataBase;
@@ -177,7 +176,7 @@ public class UsuarioUI extends JFrame implements ActionListener {
 		seletorTipoDeLivro.insertItemAt("Livro Online", 1);
 		seletorTipoDeLivro.setBounds(432, 34, 88, 20);
 		contentPane.add(seletorTipoDeLivro);
-		
+
 		JLabel lblUsuario = new JLabel("Usuario: "+ user.getUsername() + " débito de: " + user.getDebito() + " reais" );
 		lblUsuario.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		lblUsuario.setBounds(346, 13, 205, 14);
@@ -286,8 +285,12 @@ public class UsuarioUI extends JFrame implements ActionListener {
 
 
 
-	private void listaHistoricoDeAlugueis() {
-		
+	/* (non-Javadoc)
+	 * @see Biblioteca.UsuarioInterface#listaHistoricoDeAlugueis()
+	 */
+	@Override
+	public void listaHistoricoDeAlugueis() {
+
 		JPanel historicoPanel = new JPanel();
 		JScrollPane scrollHistorico = new JScrollPane();
 		scrollHistorico.setBounds(27, 250, 431, 96);
@@ -296,21 +299,25 @@ public class UsuarioUI extends JFrame implements ActionListener {
 		historicoPanel.setBackground(Color.white);
 		JTextArea textoHistorico = new JTextArea();
 		textoHistorico.setEditable(false);
-		
+
 		StringBuilder strBuilder = new StringBuilder();
 		ArrayList<ExemplarAlugado> historicoAlugueis = dataBase.listaExemplaresDevolvidos(user.getUserid());
 		for(int i=0; i<historicoAlugueis.size(); i++) {
 			strBuilder.append(historicoAlugueis.get(i).getNome() + " Emprestado em: " + historicoAlugueis.get(i).getDataEmprestimo()
-								+ " Devolvido em: " + historicoAlugueis.get(i).getDataDevolucao() + "\n");
+					+ " Devolvido em: " + historicoAlugueis.get(i).getDataDevolucao() + "\n");
 		}
 		String stringHistorico = strBuilder.toString();
 		textoHistorico.setText(stringHistorico);
 		historicoPanel.add(textoHistorico);
 		JOptionPane.showMessageDialog(null, historicoPanel, "Histórico: ", JOptionPane.PLAIN_MESSAGE);
 	}
-		
 
-	private void devolveLivros(int livroId) {
+
+	/* (non-Javadoc)
+	 * @see Biblioteca.UsuarioInterface#devolveLivros(int)
+	 */
+	@Override
+	public void devolveLivros(int livroId) {
 		try {
 			dataBase.devolveLivroAlugado(user.getUserid(), livroId);
 			JOptionPane.showMessageDialog(null, "Livro devolvido com sucesso!");
@@ -320,7 +327,11 @@ public class UsuarioUI extends JFrame implements ActionListener {
 		}
 	}
 
-	void listaAlugueisAtivos() {
+	/* (non-Javadoc)
+	 * @see Biblioteca.UsuarioInterface#listaAlugueisAtivos()
+	 */
+	@Override
+	public void listaAlugueisAtivos() {
 		panelComAlugueis.removeAll();
 		user.resetaAlugueis();
 		ArrayList<ExemplarAlugado> alugueisDoUsuario = new ArrayList<ExemplarAlugado>();
@@ -347,7 +358,7 @@ public class UsuarioUI extends JFrame implements ActionListener {
 
 	}
 
-	void listaResultadoBuscaFisico(ArrayList<ExemplarFisico> listadeResultados) {
+	private void listaResultadoBuscaFisico(ArrayList<ExemplarFisico> listadeResultados) {
 
 		paneldaBusca.removeAll(); // tira tudo que tem na busca
 		JCheckBox checkBoxBusca;
@@ -377,7 +388,7 @@ public class UsuarioUI extends JFrame implements ActionListener {
 		scrollBusca.repaint();
 	}
 
-	void listaResultadoBuscaOnline(ArrayList<ExemplarOnline> listadeResultados) {
+	private void listaResultadoBuscaOnline(ArrayList<ExemplarOnline> listadeResultados) {
 
 		paneldaBusca.removeAll(); // tira tudo que tem na busca
 		JCheckBox checkBoxBusca;
@@ -405,7 +416,11 @@ public class UsuarioUI extends JFrame implements ActionListener {
 		scrollBusca.repaint();
 	}
 
-	void alugarLivroFisico(int idLivro) {
+	/* (non-Javadoc)
+	 * @see Biblioteca.UsuarioInterface#alugarLivroFisico(int)
+	 */
+	@Override
+	public void alugarLivroFisico(int idLivro) {
 		try {
 			Titulo livroParaAlugar = dataBase.findTitulo(idLivro);
 			dataBase.adicionaAluguelAtivo(user.getUserid(), livroParaAlugar );
@@ -417,7 +432,11 @@ public class UsuarioUI extends JFrame implements ActionListener {
 
 	}
 
-	void alugarLivroOnline(int idLivro) {
+	/* (non-Javadoc)
+	 * @see Biblioteca.UsuarioInterface#alugarLivroOnline(int)
+	 */
+	@Override
+	public void alugarLivroOnline(int idLivro) {
 		JLabel lblLivro = new JLabel("Link do seu livro: ");
 		JTextField linkField = new JTextField(150);
 		JPanel myPanel = new JPanel();

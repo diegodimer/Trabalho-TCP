@@ -44,7 +44,7 @@ public class DatabaseTest {
 			Usuario testuser = null;
 			try {
 				testuser = testeDB.findUser("Diego", "123");
-			} catch (DatabaseInoperanteException | UsuarioNaoEncontradoException e) {
+			} catch (DatabaseInoperanteException e) {
 				fail("erro");
 			}
 			assertEquals("Diego", testuser.getUsername());
@@ -72,11 +72,11 @@ public class DatabaseTest {
 	}
 	
 	@Test
-	public void testFindEditoraExistente(){
+	public void testFindEditoraExistente() throws EditoraNaoEncontradaException{
 			Editora ed = null;
 			try {
 				ed = testeDB.findEditora("Rocco");
-			} catch (DatabaseInoperanteException | EditoraNaoEncontradaException e) {
+			} catch (DatabaseInoperanteException e) {
 				fail("erro");
 			}
 			assertEquals(1, ed.getId());
@@ -97,7 +97,7 @@ public class DatabaseTest {
 			Categoria cat = null;
 			try {
 				cat = testeDB.findCategoria("terror");
-			} catch (DatabaseInoperanteException | CategoriaNaoEncontradaException e) {
+			} catch (DatabaseInoperanteException e) {
 				fail("erro");
 			}
 			assertEquals(1, cat.getId());
@@ -127,7 +127,7 @@ public class DatabaseTest {
 			Titulo titulo = null;
 			try {
 				titulo = testeDB.findTitulo("harry potter and the economic fall of the soviet union");
-			} catch (DatabaseInoperanteException | TituloNaoEncontradoException e) {
+			} catch (DatabaseInoperanteException e) {
 				fail("erro");
 			}
 			assertEquals(3, titulo.getIdTitulo());

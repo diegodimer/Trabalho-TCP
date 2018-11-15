@@ -112,7 +112,7 @@ public class LoginUI extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(null, "Login realizado com sucesso!");
 				if(user.isADM())
 				{
-					FuncionarioUI admUserFrame = new FuncionarioUI(user, database);
+					FuncionarioUI admUserFrame = new FuncionarioUI(user);
 					admUserFrame.setVisible(true);
 				}
 				UsuarioUI regularUserFrame = new UsuarioUI(user, database);

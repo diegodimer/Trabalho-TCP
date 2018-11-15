@@ -12,10 +12,15 @@ public class Database implements DatabaseInterface {
 	private String usuario;
 	private String senha;
 	private String url;
-	private Connection conec = conectaDatabase();
-
+	private static Connection conec = null;
 
 	//singleton
+	 /**
+	  * Conecta a classe usando o JDBC com a database do Heroku para executar as querys. É usada junto com o construtor 
+	  * para formar o Singleton (só uma conexão possível).
+	  * @return            retorna um objeto Connection
+	  * @throws DatabaseInoperanteException se não consegue a conexão com a base de dados
+	  */
 	private Connection conectaDatabase(){
 		Connection conec;
 		url= "jdbc:postgresql://ec2-107-21-98-165.compute-1.amazonaws.com:5432/d3bt62m75hbk3k";
@@ -33,8 +38,20 @@ public class Database implements DatabaseInterface {
 	}
 	
 	Database() {
-			}
+		if(conec == null) {
+			Database.conec = conectaDatabase();
+		}
+	}
 
+	 /**
+	  * Encontra o usuário na tabela de usuários da base dados. Usada para o login do usuário no sistema.
+	  * 
+	  * @param nome   Nome do usuário a ser buscado
+	  * @param senha    Senha do usuário
+	  * @return         Objeto da classe usuário, contendo todos os seus dados.
+	  * @throws UsuarioNaoEncontradoException se não encontra o usuário com o nome e senha informados na base de dados.
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.DatabaseInterface#findUser(java.lang.String, java.lang.String)
 	 */
@@ -74,6 +91,13 @@ public class Database implements DatabaseInterface {
 
 	}
 
+	 /**
+	  * Adiciona um usuário à tabela Usuário da base de dados. A consistência dos dados é assegurada pela interface de Registro, 
+	  * que controla o tamanho do nome, senha, etc. Pela database existe apenas a checagem de o nome de usuário e e-mail serem
+	  * únicos. É usada para o registro de novos usuários no sistema.
+	  * @param user   Objeto da classe Usuario.
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados, provavelmente gerado por multiplos usuários com mesmo nome
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.DatabaseInterface#addUser(Biblioteca.Usuario)
 	 */
@@ -96,6 +120,14 @@ public class Database implements DatabaseInterface {
 		}
 	}
 
+	 /**
+	  * Torna o usuário com o nome nomeAdm administrador. A função atualiza o campo isAdm para true na tabela Usuários. Usada na
+	  * interface do funcionário para tornar novos usuários administradores.
+	  * 
+	  * @param nomeAdm   nome do usuário a ser promovido administrador
+	  * @throws UsuarioNaoEncontradoException se não encontra o usuário com o nome informado na base de dados.
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.DatabaseInterface#tornaUserAdm(java.lang.String)
 	 */
@@ -121,6 +153,14 @@ public class Database implements DatabaseInterface {
 
 
 	}
+	
+	/**
+	  * Lista os alugueis ativos do usuário a partir da tabela AlugueisAtivos, onde tem o id do usuário e do livro alugado. É usada
+	  * para listar os livros alugados pelo usuário na interface do usuário, com data de devolução e de aluguel.
+	  * 
+	  * @param user objeto da classe Usuário com os dados do usuário
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.DatabaseInterface#listaAlgueisdoUsuario(Biblioteca.Usuario)
 	 */
@@ -148,6 +188,15 @@ public class Database implements DatabaseInterface {
 		}
 	}
 
+	
+	/**
+	  * Procura na tabela exemplarFisico títulos que contenham no nome a string informada como parâmetro. Retorna uma lista de
+	  * exemplares disponíveis, objetos da classe ExemplarFisico. É usada para mostrar os livros que o usuário pode alugar.
+	  * 
+	  * @param nome título do livro a ser buscado (ou parte dele)
+	  * @return lista de exemplares disponíveis que contenham no nome o informado pelo parametro
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.DatabaseInterface#listaExemplaresDisponiveis(java.lang.String)
 	 */
@@ -171,6 +220,14 @@ public class Database implements DatabaseInterface {
 	}
 
 
+	/**
+	  * Procura na tabela exemplarFisico títulos que contenham no campo autor a string informada como parâmetro. Retorna uma lista de
+	  * exemplares disponíveis, objetos da classe ExemplarFisico. Usada para mostrar livros que o usuário pode alugar.
+	  * 
+	  * @param nome nome do autor, ou parte dele
+	  * @return lista com objetos da classe ExemplarFisico
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.DatabaseInterface#listaExemplaresDisponiveisPorAutor(java.lang.String)
 	 */
@@ -192,6 +249,15 @@ public class Database implements DatabaseInterface {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
+	
+	/**
+	  * Procura na tabela exemplarFisico títulos que contenham no campo editora a string informada como parâmetro. Retorna uma lista de
+	  * exemplares disponíveis, objetos da classe ExemplarFisico. Usada para mostrar livros que o usuário pode alugar.
+	  * 
+	  * @param nome nome da editora, ou parte dele
+	  * @return lista com objetos da classe ExemplarFisico
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.DatabaseInterface#listaExemplaresDisponiveisPorEditora(java.lang.String)
 	 */
@@ -214,6 +280,15 @@ public class Database implements DatabaseInterface {
 		}
 	}
 	
+	/**
+	  * Procura na tabela Titulo títulos que contenham no campo nome a string informada como parâmetro. Retorna uma lista de
+	  * titulos, objetos da classe Titulo. Usada para listar os titulos da database, útil para o funcionario saber o id do livro
+	  * e assim poder adicionar exemplares físicos ou online e remover títulos.
+	  * 
+	  * @param nome nome do livro, ou parte dele
+	  * @return lista com objetos da classe Titulo
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.DatabaseInterface#listaTitulos(java.lang.String)
 	 */
@@ -235,6 +310,16 @@ public class Database implements DatabaseInterface {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
+	
+	/**
+	  * Procura na tabela editora editoras que contenham no campo nome a string informada como parâmetro. Retorna uma lista de
+	  * editoras, objetos da classe Editora. Usada para listar as editoras da base de dados, útil na interface do usuário para
+	  * poder deletar ou controlar os dados inseridos.
+	  * 
+	  * @param nome nome da editora, ou parte dele
+	  * @return lista com objetos da classe Editora
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.DatabaseInterface#listaEditoras(java.lang.String)
 	 */
@@ -256,6 +341,15 @@ public class Database implements DatabaseInterface {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
+	
+	/**
+	  * Procura na tabela Autor autores que contenham no campo nome a string informada como parâmetro. Retorna uma lista de
+	  * autores, objetos da classe Autor. Útil na interface do funcionário para controle de dados inseridos na base de dados.
+	  * 
+	  * @param nome nome do autor, ou parte dele
+	  * @return lista com objetos da classe ExemplarFisico
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.DatabaseInterface#listaAutores(java.lang.String)
 	 */
@@ -277,6 +371,15 @@ public class Database implements DatabaseInterface {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
+	
+	/**
+	  * Procura na tabela Usuario usuarios que contenham no campo nome a string informada como parâmetro. Retorna uma lista de
+	  * usuarios, objetos da classe Usuario. Usada na interface do funcionário para excluir usuários.
+	  * 
+	  * @param nome nome do usuario, ou parte dele
+	  * @return lista com objetos da classe Usuario
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.DatabaseInterface#listaUsuarios(java.lang.String)
 	 */
