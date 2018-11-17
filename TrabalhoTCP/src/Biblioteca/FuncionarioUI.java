@@ -2,6 +2,7 @@ package Biblioteca;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -69,6 +70,7 @@ public class FuncionarioUI extends JFrame implements ActionListener, Funcionario
 	  * @param user objeto da classe Usuario
 	  */
 	public FuncionarioUI(Usuario user) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(LoginUI.class.getResource("/Biblioteca/Imagens/icone.png")));
 		setResizable(false);
 		this.dataBase = new Database();
 		setTitle("Biblioteca manager");
