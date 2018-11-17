@@ -26,8 +26,8 @@ public class LoginUI extends JFrame implements ActionListener {
 	private DatabaseInterface database;
 
 	/**
-	 * Create the frame.
-	 */
+	  * Construtor para fazer o display do menu de login
+	  */
 	public LoginUI() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(LoginUI.class.getResource("/Biblioteca/Imagens/icone.png")));
 		setResizable(false);
@@ -98,6 +98,10 @@ public class LoginUI extends JFrame implements ActionListener {
 		
 		  		
 	}
+	/**
+	  * Metodo das ações que os botões performam no menu
+	  * @param e objeto da classe ActionEvent
+	  */
 	// esse método é as ações dos botões
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == btnLogin) {

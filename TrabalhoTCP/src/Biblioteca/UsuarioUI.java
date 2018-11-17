@@ -61,7 +61,11 @@ public class UsuarioUI extends JFrame implements ActionListener, UsuarioInterfac
 
 	private JComboBox<String> seletorTipoDeLivro;
 	private HashMap<Integer, String> listaDeLinksLivrosBuscados;
-
+	/**
+	  * Construtor para fazer o display do menu de usuario
+	  * @param user objeto da classe Usuario
+	  * @param database objeto da classe DatabaseInterface
+	  */
 	public UsuarioUI(Usuario user, DatabaseInterface dataBase) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(UsuarioUI.class.getResource("/Biblioteca/Imagens/icone.png")));
 		setResizable(false);
@@ -184,7 +188,10 @@ public class UsuarioUI extends JFrame implements ActionListener, UsuarioInterfac
 
 
 	}
-
+	/**
+	  * Metodo das ações que os botões performam no menu de usuario
+	  * @param e objeto da classe ActionEvent
+	  */
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == btnBuscar) {
 			if(seletorTipoDeLivro.getSelectedIndex() == -1) {
@@ -283,7 +290,9 @@ public class UsuarioUI extends JFrame implements ActionListener, UsuarioInterfac
 
 	}
 
-
+	/**
+	  * Metodo para fazer o display do historico de alugueis (emprestimos e devolucoes) do usuario
+	  */
 
 	/* (non-Javadoc)
 	 * @see Biblioteca.UsuarioInterface#listaHistoricoDeAlugueis()
@@ -312,7 +321,9 @@ public class UsuarioUI extends JFrame implements ActionListener, UsuarioInterfac
 		JOptionPane.showMessageDialog(null, historicoPanel, "Histórico: ", JOptionPane.PLAIN_MESSAGE);
 	}
 
-
+	/**
+	  * Metodo para fazer o display da confirmacao da devolucao do livro e a devolucao em si
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.UsuarioInterface#devolveLivros(int)
 	 */
@@ -326,7 +337,9 @@ public class UsuarioUI extends JFrame implements ActionListener, UsuarioInterfac
 			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
 	}
-
+	/**
+	  * Metodo para listar todos alugueis ativos do usuario
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.UsuarioInterface#listaAlugueisAtivos()
 	 */
@@ -357,7 +370,10 @@ public class UsuarioUI extends JFrame implements ActionListener, UsuarioInterfac
 		panelComAlugueis.repaint();
 
 	}
-
+	/**
+	  * Metodo para listar o resultado da pesquisa por exemplares fisicos especificados
+	  * @param listadeResultados lista de objetos da classe ExemplarFisico
+	  */
 	private void listaResultadoBuscaFisico(ArrayList<ExemplarFisico> listadeResultados) {
 
 		paneldaBusca.removeAll(); // tira tudo que tem na busca
@@ -387,7 +403,10 @@ public class UsuarioUI extends JFrame implements ActionListener, UsuarioInterfac
 		scrollBusca.validate();
 		scrollBusca.repaint();
 	}
-
+	/**
+	  * Metodo para listar o resultado da pesquisa por exemplares online especificados
+	  * @param listadeResultados lista de objetos da classe ExemplarOnline
+	  */
 	private void listaResultadoBuscaOnline(ArrayList<ExemplarOnline> listadeResultados) {
 
 		paneldaBusca.removeAll(); // tira tudo que tem na busca
@@ -415,7 +434,10 @@ public class UsuarioUI extends JFrame implements ActionListener, UsuarioInterfac
 		scrollBusca.validate();
 		scrollBusca.repaint();
 	}
-
+	/**
+	  * Metodo para alugar o exemplar fisico, adicionando ele pra lista de alugueis ativos do usuario
+	  * @param idLivro id do titulo
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.UsuarioInterface#alugarLivroFisico(int)
 	 */
@@ -431,7 +453,10 @@ public class UsuarioUI extends JFrame implements ActionListener, UsuarioInterfac
 		}
 
 	}
-
+	/**
+	  * Metodo para alugar o exemplar online, ofereçendo o link para consulta virtual
+	  * @param idLivro id do titulo
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.UsuarioInterface#alugarLivroOnline(int)
 	 */

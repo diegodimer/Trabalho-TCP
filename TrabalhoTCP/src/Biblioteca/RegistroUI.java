@@ -25,7 +25,10 @@ public class RegistroUI extends JFrame implements ActionListener {
 	private DatabaseInterface dataBase;
 	// botao
 	private JButton btnRegistrar;
-	
+
+	/**
+	  * Construtor para fazer o display do menu de registro de novo usuario
+	  */
 	public RegistroUI(DatabaseInterface dataBase) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(RegistroUI.class.getResource("/Biblioteca/Imagens/icone.png")));
 		setResizable(false);
@@ -87,7 +90,10 @@ public class RegistroUI extends JFrame implements ActionListener {
 		btnCancelar.setBounds(186, 204, 89, 23);
 		contentPane.add(btnCancelar);
 	}
-
+	/**
+	  * Metodo das ações que os botões performam no menu de registro
+	  * @param e objeto da classe ActionEvent
+	  */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == btnRegistrar) {

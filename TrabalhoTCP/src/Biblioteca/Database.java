@@ -83,7 +83,7 @@ public class Database implements DatabaseInterface {
 				return user;
 			}
 			else
-				throw new UsuarioNaoEncontradoException("Usuario nao encontrado!"); // é insconsistencia na BD, mas né.
+				throw new UsuarioNaoEncontradoException("Usuario nao encontrado!"); // é inconsistencia na BD, mas né.
 		} catch (SQLException e) {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
@@ -401,9 +401,14 @@ public class Database implements DatabaseInterface {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
-	
-	
-	
+	/**
+	  * Procura na tabela exemplarFisico títulos que contenham no campo categoria a string informada como parâmetro. Retorna uma lista de
+	  * exemplares disponíveis, objetos da classe ExemplarFisico. Usada para mostrar livros que o usuário pode alugar.
+	  * 
+	  * @param nome nome da categoria, ou parte dele
+	  * @return lista com objetos da classe ExemplarFisico
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.DatabaseInterface#listaExemplaresDisponiveisPorCategoria(java.lang.String)
 	 */
@@ -425,7 +430,14 @@ public class Database implements DatabaseInterface {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
-
+	/**
+	  * Procura na tabela exemplarFisico titulo que contenha no campo livro o int informado como parâmetro. Retorna um
+	  * exemplar fisico. Usada para encontrar exemplares através do idtitulo.
+	  * 
+	  * @param idTitulo id do titulo
+	  * @return objeto da classe ExemplarFisico
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.DatabaseInterface#findExemplarFisico(int)
 	 */
@@ -451,7 +463,11 @@ public class Database implements DatabaseInterface {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
-
+	 /**
+	  * Adiciona um autor à tabela Autor da base de dados. É usada para o registro de novos autores no sistema.
+	  * @param autor   Objeto da classe Autor.
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.DatabaseInterface#addAutor(Biblioteca.Autor)
 	 */
@@ -470,10 +486,14 @@ public class Database implements DatabaseInterface {
 		}
 
 	}
-
-
-
-
+	/**
+	  * Procura na tabela Autor autor que contenha no campo nomeau o string informado como parâmetro. Retorna um
+	  * autor. Usada para encontrar autor através do nome.
+	  * 
+	  * @param nome nome do autor
+	  * @return objeto da classe Autor
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.DatabaseInterface#findAutor(java.lang.String)
 	 */
@@ -504,6 +524,12 @@ public class Database implements DatabaseInterface {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
+	 /**
+	  * Adiciona uma categoria à tabela CategoriaPorTitulo da base de dados. É usada para o registro de novas categorias no sistema.
+	  * @param idtitulo   id do titulo.
+	  * @param idcat id da categoria
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.DatabaseInterface#addCategoriaPorTitulo(int, int)
 	 */
@@ -522,7 +548,11 @@ public class Database implements DatabaseInterface {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
-
+	 /**
+	  * Adiciona uma editora à tabela Editora da base de dados. É usada para o registro de novas editoras no sistema.
+	  * @param ed   objeto da classe Editora.
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 
 	/* (non-Javadoc)
 	 * @see Biblioteca.DatabaseInterface#addEditora(Biblioteca.Editora)
@@ -541,6 +571,14 @@ public class Database implements DatabaseInterface {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
+	/**
+	  * Procura na tabela Editora editora que contenha no campo nomeed o string informado como parâmetro. Retorna uma
+	  * editora. Usada para encontrar editora através do nome.
+	  * 
+	  * @param nome nome da editora
+	  * @return objeto da classe Editora
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.DatabaseInterface#findEditora(java.lang.String)
 	 */
@@ -572,7 +610,11 @@ public class Database implements DatabaseInterface {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
-
+	 /**
+	  * Adiciona uma categoria à tabela Categoria da base de dados. É usada para o registro de novas categorias no sistema.
+	  * @param cat   objeto da classe Categoria.
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.DatabaseInterface#addCategoria(Biblioteca.Categoria)
 	 */
@@ -590,6 +632,14 @@ public class Database implements DatabaseInterface {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
+	/**
+	  * Procura na tabela Categoria categoria que contenha no campo nomeca o string informado como parâmetro. Retorna uma
+	  * categoria. Usada para encontrar categoria através do nome.
+	  * 
+	  * @param nome nome da categoria
+	  * @return objeto da classe Categoria
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.DatabaseInterface#findCategoria(java.lang.String)
 	 */
@@ -623,7 +673,11 @@ public class Database implements DatabaseInterface {
 	}
 
 
-
+	 /**
+	  * Adiciona um titulo à tabela Titulo da base de dados. É usada para o registro de novos titulos no sistema.
+	  * @param livro   objeto da classe Titulo.
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 
 	/* (non-Javadoc)
 	 * @see Biblioteca.DatabaseInterface#addTitulo(Biblioteca.Titulo)
@@ -649,7 +703,14 @@ public class Database implements DatabaseInterface {
 			throw new DatabaseInoperanteException("Erro na database, id do autor ou id da editora possivelmente errados");
 		}
 	}
-
+	/**
+	  * Procura na tabela Titulo titulo que contenha no campo nomet o string informado como parâmetro. Retorna um
+	  * titulo. Usada para encontrar titulo através do nome.
+	  * 
+	  * @param nome nome do titulo
+	  * @return objeto da classe Titulo
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.DatabaseInterface#findTitulo(java.lang.String)
 	 */
@@ -681,7 +742,14 @@ public class Database implements DatabaseInterface {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
-
+	/**
+	  * Procura na tabela Titulo titulo que contenha os campos nomet, nomeau, nomeed do Titulo informado como parâmetro. Retorna um
+	  * Titulo. Usada para encontrar titulo através da classe Titulo.
+	  * 
+	  * @param titulo objeto da classe Titulo
+	  * @return objeto da classe Titulo
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.DatabaseInterface#findTitulo(Biblioteca.Titulo)
 	 */
@@ -716,7 +784,14 @@ public class Database implements DatabaseInterface {
 		}
 	}
 
-
+	/**
+	  * Procura na tabela Titulo titulo que contenha no campo idTitulo o int informado como parâmetro. Retorna um
+	  * titulo. Usada para encontrar titulo através do id do titulo.
+	  * 
+	  * @param idTitulo id do titulo
+	  * @return objeto da classe Titulo
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.DatabaseInterface#findTitulo(int)
 	 */
@@ -749,7 +824,11 @@ public class Database implements DatabaseInterface {
 		}
 	}
 
-
+	 /**
+	  * Remove um titulo da tabela Titulo da base de dados. É usada para a remoção de titulos no sistema.
+	  * @param idTitulo   id do titulo.
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 
 	/* (non-Javadoc)
 	 * @see Biblioteca.DatabaseInterface#removeTitulo(int)
@@ -768,6 +847,11 @@ public class Database implements DatabaseInterface {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
+	 /**
+	  * Remove um autor da tabela Autor da base de dados. É usada para a remoção de autores no sistema.
+	  * @param idau   id do autor.
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.DatabaseInterface#removeAutor(int)
 	 */
@@ -785,6 +869,11 @@ public class Database implements DatabaseInterface {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
+	 /**
+	  * Remove uma editora da tabela Editora da base de dados. É usada para a remoção de editoras no sistema.
+	  * @param ided   id da editora.
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.DatabaseInterface#removeEditora(int)
 	 */
@@ -802,6 +891,11 @@ public class Database implements DatabaseInterface {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
+	 /**
+	  * Remove um usuario da tabela Usuario da base de dados. É usada para a remoção de usuarios no sistema.
+	  * @param idu   id do usuario.
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.DatabaseInterface#removeUsuario(int)
 	 */
@@ -819,15 +913,16 @@ public class Database implements DatabaseInterface {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
-
+	
 	void closeDatabase() throws SQLException {
 		conec.close();
 	}
 
 
 
-
-
+	 /**
+	  * Cria todas as tabelas da database do sistema.
+	  */
 
 	void criaTodasTabelas() {
 		try {
@@ -933,7 +1028,12 @@ public class Database implements DatabaseInterface {
 		}
 	}
 
-
+	 /**
+	  * Adiciona exemplares fisicos à tabela ExemplarFisico da base de dados. É usada para o registro de novos exemplares no sistema.
+	  * @param idTitulo  id do Titulo.
+	  * @param numDisponiveis numero de exemplares fisicos
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.DatabaseInterface#addExemplarFisico(int, int)
 	 */
@@ -954,6 +1054,12 @@ public class Database implements DatabaseInterface {
 		}
 
 	}
+	 /**
+	  * Adiciona o exemplar online à tabela ExemplarOnline da base de dados. É usada para o registro de novos exemplares onlines no sistema.
+	  * @param idTitulo  id do Titulo.
+	  * @param link link do exemplar online
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.DatabaseInterface#addExemplarOnline(int, java.lang.String)
 	 */
@@ -975,7 +1081,14 @@ public class Database implements DatabaseInterface {
 
 	}
 
-
+	/**
+	  * Procura na tabela exemplarOnline títulos que contenham no campo nomet a string informada como parâmetro. Retorna uma lista de
+	  * exemplares disponíveis online, objetos da classe ExemplarOnline. Usada para mostrar exemplares online que o usuário pode acessar.
+	  * 
+	  * @param nome nome do titulo, ou parte dele
+	  * @return lista com objetos da classe ExemplarOnline
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.DatabaseInterface#listaExemplarOnlinePorTitulo(java.lang.String)
 	 */
@@ -997,7 +1110,12 @@ public class Database implements DatabaseInterface {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
-
+	 /**
+	  * Adiciona o livro à tabela AluguelAtivo da base de dados. É usada para o registro de novos alugueis de usuario no sistema.
+	  * @param idUser  id do Usuario.
+	  * @param livro objeto da classe Titulo
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.DatabaseInterface#adicionaAluguelAtivo(int, Biblioteca.Titulo)
 	 */
@@ -1023,14 +1141,22 @@ public class Database implements DatabaseInterface {
 			throw new DatabaseInoperanteException("Exemplar não pode ser alugado! Lembre-se: você só pode ter uma cópia de cada exemplar!");
 		}		
 	}
-
+	 /**
+	  * Atualiza a tabela ExemplarFisico da base de dados. É usada para incrementar o numero de exemplares disponiveis no sistema.
+	  * @param livroID  id do livro.
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 	private void incrementaNumeroDisponiveis(int livroID) throws SQLException {
 		PreparedStatement st2 = conec.prepareStatement("UPDATE ExemplarFisico set num_Disponiveis = num_Disponiveis+1 where livro= ? ");
 		st2.setInt(1, livroID);
 		st2.executeUpdate();
 		st2.close();
 	}
-
+	 /**
+	  * Atualiza a tabela ExemplarFisico da base de dados. É usada para decrementar o numero de exemplares disponiveis no sistema.
+	  * @param livroID  id do livro.
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 	private void decrementaNumeroDisponiveis(int livroID) throws SQLException {
 		PreparedStatement st2 = conec.prepareStatement("UPDATE ExemplarFisico set num_Disponiveis = num_Disponiveis-1 where livro= ? ");
 		st2.setInt(1, livroID);
@@ -1038,7 +1164,15 @@ public class Database implements DatabaseInterface {
 		st2.close();
 	}
 	
-	
+	/**
+	  * Procura na tabela AluguelAtivo títulos que contenham o campo userId e livroId informados como parâmetro.
+	  * Retorna uma data de devolução no formato LocalDate. Usada para consultar a data de devolução do livro do usuario.
+	  * 
+	  * @param userId id do usuario
+	  * @param livroId id do livro
+	  * @return objeto da classe LocalDate
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 	private LocalDate consultaDataDevolucao(int userId, int livroId) throws DatabaseInoperanteException {
 		try {
 			PreparedStatement st = conec.prepareStatement("Select dataemprestimo from AluguelAtivo where usuario = ? and livro = ?");
@@ -1062,7 +1196,14 @@ public class Database implements DatabaseInterface {
 			throw new DatabaseInoperanteException("Erro na database!");
 		}
 	}
-
+	/**
+	  * Insere na tabela AluguelInativo títulos que contenham o campo userId e livroId informados como parâmetro.
+	  *  Usada para devolver o livro alugado pelo usuario.
+	  * 
+	  * @param userId id do usuario
+	  * @param livroId id do livro
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.DatabaseInterface#devolveLivroAlugado(int, int)
 	 */
@@ -1086,7 +1227,14 @@ public class Database implements DatabaseInterface {
 			throw new DatabaseInoperanteException("Erro na database! Aluguel nao foi devolvido");
 		}
 	}
-
+	/**
+	  * Remove da tabela AluguelAtivo títulos que contenham o campo userId e livroId informados como parâmetro.
+	  *  Usada para remover o livro alugado pelo usuario da lista de livros alugados pelo usuario.
+	  * 
+	  * @param userId id do usuario
+	  * @param livroId id do livro
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 	private void removeAluguelAtivo(int userId, int livroId) throws SQLException {
 		PreparedStatement st = conec.prepareStatement("delete FROM ALUGUELATIVO WHERE livro = ? and usuario = ?");
 		st.setInt(1, livroId);
@@ -1094,7 +1242,14 @@ public class Database implements DatabaseInterface {
 		st.executeUpdate();
 		st.close();
 	}
-	
+	/**
+	  * Procura na tabela AluguelInativo títulos que contenham no campo usuario a int informada como parâmetro. Retorna uma lista de
+	  * exemplares já devolvidos, objetos da classe ExemplarAlugado. Usada para mostrar exemplares que já foram devolvidos pelo usuário.
+	  * 
+	  * @param userID id do usuario
+	  * @return lista com objetos da classe ExemplarAlugado
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.DatabaseInterface#listaExemplaresDevolvidos(int)
 	 */

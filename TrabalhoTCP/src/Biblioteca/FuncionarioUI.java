@@ -64,7 +64,10 @@ public class FuncionarioUI extends JFrame implements ActionListener, Funcionario
 	private JScrollPane scrollUsuario;
 	private JPanel panelUsuario;
 	private JTextField CampoNomeUsuario;
-
+	/**
+	  * Construtor para fazer o display do menu de funcionario
+	  * @param user objeto da classe Usuario
+	  */
 	public FuncionarioUI(Usuario user) {
 		setResizable(false);
 		this.dataBase = new Database();
@@ -137,7 +140,10 @@ public class FuncionarioUI extends JFrame implements ActionListener, Funcionario
 		btnAdicionarAutor.setBounds(15, 53, 174, 23);
 		contentPane.add(btnAdicionarAutor);
 	}
-
+	/**
+	  * Metodo que recebe o input do funcionario e ativa o botao selecionado
+	  * @param e objeto da classe ActionEvent
+	  */
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == btnMakeAdm) 
 			tornaUserADM();
@@ -179,7 +185,9 @@ public class FuncionarioUI extends JFrame implements ActionListener, Funcionario
 			deletarUsuario2();
 
 	}
-
+	/**
+	  * Metodo para fazer o display do menu de deletar titulos
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.FuncionarioInterface#deletarTitulo()
 	 */
@@ -238,6 +246,9 @@ public class FuncionarioUI extends JFrame implements ActionListener, Funcionario
 		janela.setVisible(true);
 
 	}
+	/**
+	  * Metodo para mostrar os titulos com id buscado
+	  */
 	private void mostrarIdTitulos() {
 		String titulo = CampoNomeTitulo.getText();
 		try {
@@ -258,14 +269,18 @@ public class FuncionarioUI extends JFrame implements ActionListener, Funcionario
 			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
 	}
-
+	/**
+	  * Metodo para fazer o display da confirmacao de titulo deletado e a deleção do titulo em si
+	  */
 	private void deletarTitulo2(){
 		String titulo = CampoId.getText();
 		if(dataBase.removeTitulo(Integer.parseInt(titulo))) {
 			JOptionPane.showMessageDialog(null, "Titulo removido!");
 		}		
 	}
-
+	/**
+	  * Metodo para fazer o display do menu de deletar editoras
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.FuncionarioInterface#deletarEditora()
 	 */
@@ -316,12 +331,18 @@ public class FuncionarioUI extends JFrame implements ActionListener, Funcionario
 		janela.setVisible(true);
 
 	}
+	/**
+	  * Metodo para mostrar a mensagem de confirmacao da delecao da editora e deletar a editora
+	  */
 	private void deletarEditora2(){
 		String nome = CampoIdEditora.getText();
 		if(dataBase.removeEditora(Integer.parseInt(nome))) {
 			JOptionPane.showMessageDialog(null, "Editora removida!");
 		}		
 	}
+	/**
+	  * Metodo para mostrar as editoras com id buscado
+	  */
 	private void mostrarIdEditoras() {
 		String nome = CampoNomeEditora.getText();
 		try {
@@ -343,7 +364,9 @@ public class FuncionarioUI extends JFrame implements ActionListener, Funcionario
 		}
 	}
 
-
+	/**
+	  * Metodo para fazer o display do menu de deletar autores
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.FuncionarioInterface#deletarAutor()
 	 */
@@ -394,12 +417,18 @@ public class FuncionarioUI extends JFrame implements ActionListener, Funcionario
 		janela.setVisible(true);
 
 	}
+	/**
+	  * Metodo para mostrar a mensagem de confirmacao da delecao de autor e deletar o autor
+	  */
 	private void deletarAutor2(){
 		String nome = CampoIdAutor.getText();
 		if(dataBase.removeAutor(Integer.parseInt(nome))) {
 			JOptionPane.showMessageDialog(null, "Autor removido!");
 		}		
 	}
+	/**
+	  * Metodo para mostrar os autores com id buscado
+	  */
 	private void mostrarIdAutores() {
 		String nome = CampoNomeAutor.getText();
 		try {
@@ -420,6 +449,9 @@ public class FuncionarioUI extends JFrame implements ActionListener, Funcionario
 			e.printStackTrace();
 		}
 	}
+	/**
+	  * Metodo para fazer o display do menu de deletar usuario
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.FuncionarioInterface#deletarUsuario()
 	 */
@@ -470,12 +502,18 @@ public class FuncionarioUI extends JFrame implements ActionListener, Funcionario
 		janela.setVisible(true);
 
 	}
+	/**
+	  * Metodo para mostrar a mensagem de confirmacao da delecao de usuario e deletar o usuario
+	  */
 	private void deletarUsuario2(){
 		String nome = CampoIdUsuario.getText();
 		if(dataBase.removeUsuario(Integer.parseInt(nome))) {
 			JOptionPane.showMessageDialog(null, "Usuario removido!");
 		}		
 	}
+	/**
+	  * Metodo para mostrar os usuarios com id buscado
+	  */
 	private void mostrarIdUsuarios() {
 		String nome = CampoNomeUsuario.getText();
 		try {
@@ -496,7 +534,9 @@ public class FuncionarioUI extends JFrame implements ActionListener, Funcionario
 			e.printStackTrace();
 		}
 	}
-
+	/**
+	  * Metodo para fazer o display do menu de adicionar exemplares fisicos e para fazer a adicao
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.FuncionarioInterface#adicionaExemplarFisico()
 	 */
@@ -566,6 +606,9 @@ public class FuncionarioUI extends JFrame implements ActionListener, Funcionario
 
 
 	}
+	/**
+	  * Metodo para fazer o display do menu de adicionar exemplares onlines e para fazer a adicao
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.FuncionarioInterface#adicionaExemplarOnline()
 	 */
@@ -639,7 +682,9 @@ public class FuncionarioUI extends JFrame implements ActionListener, Funcionario
 	}
 
 
-
+	/**
+	  * Metodo para fazer o display do menu de adicionar novos titulos e pra fazer a adicao do livro
+	  */
 
 	/* (non-Javadoc)
 	 * @see Biblioteca.FuncionarioInterface#adicionaTitulo()
@@ -679,6 +724,9 @@ public class FuncionarioUI extends JFrame implements ActionListener, Funcionario
 
 
 	}
+	/**
+	  * Metodo para fazer o display do menu de adicionar novas categorias e para fazer a adicao
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.FuncionarioInterface#adicionaCategoria()
 	 */
@@ -702,7 +750,9 @@ public class FuncionarioUI extends JFrame implements ActionListener, Funcionario
 		}
 	}
 
-
+	/**
+	  * Metodo para fazer o display do menu de adicionar novas editoras e pra fazer a adicao
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.FuncionarioInterface#adicionaEditora()
 	 */
@@ -727,7 +777,9 @@ public class FuncionarioUI extends JFrame implements ActionListener, Funcionario
 
 
 	}
-
+	/**
+	  * Metodo para fazer o display do menu de adicionar novos autores e para adicioná-los
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.FuncionarioInterface#adicionarAutor()
 	 */
@@ -750,7 +802,9 @@ public class FuncionarioUI extends JFrame implements ActionListener, Funcionario
 			}
 		}
 	}
-
+	/**
+	  * Metodo para fazer o display do menu de tornar usuario administrador e para torná-lo admin
+	  */
 	/* (non-Javadoc)
 	 * @see Biblioteca.FuncionarioInterface#tornaUserADM()
 	 */
