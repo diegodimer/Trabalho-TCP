@@ -1,7 +1,0 @@
-HELP > INSTALL NEW SOFTWARE
-
-onde diz "work with" clicar em ADD e digitar o link "http://download.eclipse.org/windowbuilder/lastgoodbuild/"
-vai aparecer em baixo com o nome que você colocou, clica na caixa de seleção pra marcar todos e clica em next (vai demorar um pouco)
-next de novo, aceita os termos e finish.
-
-**reiniciar o eclipse pra atualizar**

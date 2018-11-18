@@ -281,8 +281,27 @@ public class DatabaseTest {
 	}
 	@Test
 	public void testlistaUsuarios() throws DatabaseInoperanteException, SQLException {
-		ArrayList<Usuario> lista = testeDB.listaUsuarios("t");
-		System.out.println(lista.get(0).toString());
+		ArrayList<Usuario> lista = testeDB.listaUsuarios("e");
+		System.out.println("Lista de usuarios com \"e\" no nome: ");
+		System.out.println(lista);
 	}
 	
+	@Test
+	public void testListaexemplaresOnlinePorCategoria() throws DatabaseInoperanteException{
+		System.out.println("Teste de listar livros online por categoria, devem aparecer livros que pertencem a categoria com t no nome: ");
+		ArrayList<ExemplarOnline> lista = testeDB.listaExemplaresOnlineDisponiveisPorCategoria("t");
+		System.out.println(lista);
+	}
+	@Test
+	public void testListaexemplaresOnlinePorAutor() throws DatabaseInoperanteException{
+		System.out.println("Teste de listar livros Online por Autor, devem aparecer Autores com r minusculo no nome: ");
+		ArrayList<ExemplarOnline> lista = testeDB.listaExemplarOnlinePorAutor("r");
+		System.out.println(lista);
+	}
+	@Test
+	public void testListaexemplaresOnlinePorEditora() throws DatabaseInoperanteException{
+		ArrayList<ExemplarOnline> lista = testeDB.listaExemplarOnlinePorEditora("R");
+		System.out.println("Teste de listar livros Online por Editora, devem aparecer editoras com R maiúsculo no nome: ");
+		System.out.println(lista);
+	}
 }
