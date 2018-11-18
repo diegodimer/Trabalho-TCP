@@ -1,5 +1,6 @@
 package Biblioteca;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -29,6 +30,7 @@ public class LoginUI extends JFrame implements ActionListener {
 	  * Construtor para fazer o display do menu de login
 	  */
 	public LoginUI() {
+		
 		setIconImage(Toolkit.getDefaultToolkit().getImage(LoginUI.class.getResource("/Biblioteca/Imagens/icone.png")));
 		setResizable(false);
 		database = new Database(); // abre a database (por isso demora um pouco pra aparecer a tela)
@@ -114,12 +116,16 @@ public class LoginUI extends JFrame implements ActionListener {
 			try {
 				user = database.findUser(usernameField.getText(), stringBuilder.toString());
 				JOptionPane.showMessageDialog(null, "Login realizado com sucesso!");
+				UsuarioUI regularUserFrame = new UsuarioUI(user);
+				regularUserFrame.setLocationRelativeTo(null);
+				
 				if(user.isADM())
 				{
 					FuncionarioUI admUserFrame = new FuncionarioUI(user);
+					// poem do ladinho da outra
+					admUserFrame.setLocation(regularUserFrame.getX() + regularUserFrame.getWidth(), regularUserFrame.getY());
 					admUserFrame.setVisible(true);
 				}
-				UsuarioUI regularUserFrame = new UsuarioUI(user, database);
 				regularUserFrame.setVisible(true);
 				this.dispose(); // fecha esse frame de login
 					
@@ -130,7 +136,8 @@ public class LoginUI extends JFrame implements ActionListener {
 			
 		}
 		else {
-			RegistroUI registrar = new RegistroUI(database);
+			RegistroUI registrar = new RegistroUI();
+			registrar.setLocationRelativeTo(null);
 			registrar.setVisible(true);
 		}
 	}

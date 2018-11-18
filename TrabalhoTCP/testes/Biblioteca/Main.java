@@ -18,7 +18,8 @@ public class Main {
               UIManager.setLookAndFeel(tema_padrao);  
             } catch (Exception e) {  
         }
-		LoginUI frame = new LoginUI();		EventQueue.invokeLater(new Runnable() {			public void run() {				try {					frame.setVisible(true);				} catch (Exception e) {					e.printStackTrace();				}			}		});
+		LoginUI frame = new LoginUI();
+		frame.setLocationRelativeTo(null);		EventQueue.invokeLater(new Runnable() {			public void run() {				try {					frame.setVisible(true);				} catch (Exception e) {					e.printStackTrace();				}			}		});
 		
 	}
 }

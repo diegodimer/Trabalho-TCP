@@ -53,7 +53,7 @@ public class Autor {
 	}
 	/**
 	  * Setter para o id do autor
-	  * @return id id do autor
+	  * @param id id do autor
 	  */
 	public void setId(int id) {
 		this.id = id;

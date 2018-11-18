@@ -67,7 +67,7 @@ public class FuncionarioUI extends JFrame implements ActionListener, Funcionario
 	private JTextField CampoNomeUsuario;
 	/**
 	  * Construtor para fazer o display do menu de funcionario
-	  * @param user objeto da classe Usuario
+	  * @param user objeto da classe Usuario, usuário administrador que vai usar as funções de administrador
 	  */
 	public FuncionarioUI(Usuario user) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(LoginUI.class.getResource("/Biblioteca/Imagens/icone.png")));

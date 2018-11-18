@@ -1,5 +1,6 @@
 package Biblioteca;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -13,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.ImageIcon;
 
 @SuppressWarnings("serial")
 public class RegistroUI extends JFrame implements ActionListener {
@@ -28,67 +30,74 @@ public class RegistroUI extends JFrame implements ActionListener {
 
 	/**
 	  * Construtor para fazer o display do menu de registro de novo usuario
+	  *
 	  */
-	public RegistroUI(DatabaseInterface dataBase) {
+	public RegistroUI() {
+				
 		setIconImage(Toolkit.getDefaultToolkit().getImage(RegistroUI.class.getResource("/Biblioteca/Imagens/icone.png")));
 		setResizable(false);
+		this.dataBase = new Database();
 		setTitle("Registrar");
-		this.dataBase = dataBase;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 342, 296);
+		setBounds(100, 100, 332, 290);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		txtNomeDeUsurio = new JTextField();
-		txtNomeDeUsurio.setBounds(83, 82, 222, 20);
+		txtNomeDeUsurio.setBounds(83, 109, 222, 20);
 		contentPane.add(txtNomeDeUsurio);
 		txtNomeDeUsurio.setColumns(10);
 		
 		txtEmail = new JTextField();
-		txtEmail.setBounds(83, 113, 222, 20);
+		txtEmail.setBounds(83, 140, 222, 20);
 		contentPane.add(txtEmail);
 		txtEmail.setColumns(10);
 		
 		pwdSenha = new JPasswordField();
-		pwdSenha.setBounds(124, 146, 181, 20);
+		pwdSenha.setBounds(124, 171, 181, 20);
 		contentPane.add(pwdSenha);
 		
 		pwdSenhaconfirmacao = new JPasswordField();
-		pwdSenhaconfirmacao.setBounds(124, 173, 181, 20);
+		pwdSenhaconfirmacao.setBounds(124, 202, 181, 20);
 		contentPane.add(pwdSenhaconfirmacao);
 		
 		JLabel lblUsuario = new JLabel("Usuario:");
-		lblUsuario.setBounds(21, 85, 103, 14);
+		lblUsuario.setBounds(21, 112, 103, 14);
 		contentPane.add(lblUsuario);
 		
 		JLabel lblEmail = new JLabel("E-mail:");
-		lblEmail.setBounds(21, 116, 103, 14);
+		lblEmail.setBounds(21, 143, 103, 14);
 		contentPane.add(lblEmail);
 		
 		JLabel lblSenha = new JLabel("Senha:");
-		lblSenha.setBounds(21, 149, 103, 14);
+		lblSenha.setBounds(21, 174, 103, 14);
 		contentPane.add(lblSenha);
 		
 		JLabel lblConfirmeASenha = new JLabel("Confirme a senha:");
-		lblConfirmeASenha.setBounds(21, 176, 103, 14);
+		lblConfirmeASenha.setBounds(21, 205, 103, 14);
 		contentPane.add(lblConfirmeASenha);
 		
 		btnRegistrar = new JButton("Registrar");
-		btnRegistrar.setBounds(68, 204, 89, 23);
+		btnRegistrar.setBounds(68, 233, 89, 23);
 		btnRegistrar.addActionListener(this);
 		contentPane.add(btnRegistrar);
 		
 		JLabel lblNovoUsurio = new JLabel("Novo usu\u00E1rio");
 		lblNovoUsurio.setFont(new Font("Monospaced", Font.PLAIN, 28));
-		lblNovoUsurio.setBounds(10, 11, 265, 65);
+		lblNovoUsurio.setBounds(10, 0, 265, 65);
 		contentPane.add(lblNovoUsurio);
 		
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.addActionListener(this);
-		btnCancelar.setBounds(186, 204, 89, 23);
+		btnCancelar.setBounds(186, 233, 89, 23);
 		contentPane.add(btnCancelar);
+		
+		JLabel lblNewLabel = new JLabel("New label");
+		lblNewLabel.setIcon(new ImageIcon(RegistroUI.class.getResource("/Biblioteca/Imagens/kakashi_lendo_um_livro.png")));
+		lblNewLabel.setBounds(210, 0, 95, 112);
+		contentPane.add(lblNewLabel);
 	}
 	/**
 	  * Metodo das ações que os botões performam no menu de registro
@@ -103,7 +112,6 @@ public class RegistroUI extends JFrame implements ActionListener {
 			
 			StringBuilder confirmacaoSenha = new StringBuilder();
 			confirmacaoSenha.append(pwdSenhaconfirmacao.getPassword());
-			System.out.println("senha: "+ senha + "confirm: " + confirmacaoSenha);
 			if( ! (senha.toString().intern() == confirmacaoSenha.toString().intern() ) )
 				JOptionPane.showMessageDialog(null, "Senhas não conferem!");
 			else if(txtEmail.getText().isEmpty() || txtNomeDeUsurio.getText().isEmpty() || senha.toString().intern().isEmpty())
@@ -129,6 +137,4 @@ public class RegistroUI extends JFrame implements ActionListener {
 			this.dispose();
 		
 	}
-	
-	
 }

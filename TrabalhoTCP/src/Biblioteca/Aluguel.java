@@ -18,7 +18,7 @@ public class Aluguel {
 	}
 	/**
 	  * Setter para o tempo restante de aluguel
-	  * @param int valor de tempo restante
+	  * @param tempoRestante valor de tempo restante
 	  */
 	public void setTempoRestante(int tempoRestante) {
 		this.tempoRestante = tempoRestante;

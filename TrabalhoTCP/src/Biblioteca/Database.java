@@ -826,7 +826,7 @@ public class Database implements DatabaseInterface {
 
 	 /**
 	  * Remove um titulo da tabela Titulo da base de dados. É usada para a remoção de titulos no sistema.
-	  * @param idTitulo   id do titulo.
+	  * @param idtitulo id do titulo.
 	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
 	  */
 
@@ -1110,6 +1110,91 @@ public class Database implements DatabaseInterface {
 			throw new DatabaseInoperanteException("Erro na database");
 		}
 	}
+	
+	/**
+	  * Procura na tabela exemplarOnline títulos que contenham no campo nomeau a string informada como parâmetro. Retorna uma lista de
+	  * exemplares disponíveis online, objetos da classe ExemplarOnline. Usada para mostrar exemplares online que o usuário pode acessar.
+	  * 
+	  * @param nome nome do autor, ou parte dele
+	  * @return lista com objetos da classe ExemplarOnline
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
+	@Override
+	public ArrayList<ExemplarOnline> listaExemplarOnlinePorAutor(String nome) throws DatabaseInoperanteException {
+		try {
+			PreparedStatement st = conec.prepareStatement("SELECT nomet,nomeau,idau,nomeed,ided,idtitulo,link FROM Titulo JOIN autor ON(autor=idau) JOIN editora ON (ided=editora) JOIN exemplaronline ON (livro = idtitulo) WHERE nomeau LIKE ?");
+			st.setString(1,"%"+ nome+"%");
+			ResultSet rs = null;
+			rs = st.executeQuery();
+			ArrayList<ExemplarOnline> lista = new ArrayList<>();
+			while (rs.next())
+			{
+				lista.add(new ExemplarOnline(rs.getString(1), new Autor(rs.getString(2),rs.getInt(3)),new Editora(rs.getString(4),rs.getInt(5)),rs.getInt(6),rs.getString(7)));
+
+			}
+			return lista;
+		} catch (SQLException e) {
+			throw new DatabaseInoperanteException("Erro na database");
+		}
+	}
+	
+	/**
+	  * Procura na tabela exemplarOnline títulos que contenham no campo nomeed a string informada como parâmetro. Retorna uma lista de
+	  * exemplares disponíveis online, objetos da classe ExemplarOnline. Usada para mostrar exemplares online que o usuário pode acessar.
+	  * 
+	  * @param nome nome da editora, ou parte dele
+	  * @return lista com objetos da classe ExemplarOnline
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
+	@Override
+	public ArrayList<ExemplarOnline> listaExemplarOnlinePorEditora(String nome) throws DatabaseInoperanteException {
+		try {
+			PreparedStatement st = conec.prepareStatement("SELECT nomet,nomeau,idau,nomeed,ided,idtitulo,link FROM Titulo JOIN autor ON(autor=idau) JOIN editora ON (ided=editora) JOIN exemplaronline ON (livro = idtitulo) WHERE nomeed LIKE ?");
+			st.setString(1,"%"+ nome+"%");
+			ResultSet rs = null;
+			rs = st.executeQuery();
+			ArrayList<ExemplarOnline> lista = new ArrayList<>();
+			while (rs.next())
+			{
+				lista.add(new ExemplarOnline(rs.getString(1), new Autor(rs.getString(2),rs.getInt(3)),new Editora(rs.getString(4),rs.getInt(5)),rs.getInt(6),rs.getString(7)));
+
+			}
+			return lista;
+		} catch (SQLException e) {
+			throw new DatabaseInoperanteException("Erro na database");
+		}
+	}
+	
+	/**
+	  * Procura na tabela exemplarOnline títulos que contenham no campo categoria a string informada como parâmetro. Retorna uma lista de
+	  * exemplares disponíveis, objetos da classe ExemplarOnline. Usada para mostrar livros que o usuário pode alugar.
+	  * 
+	  * @param nome nome da categoria, ou parte dele
+	  * @return lista com objetos da classe ExemplarFisico
+	  * @throws DatabaseInoperanteException se existe algum erro de conexão com a base de dados
+	  */
+	/* (non-Javadoc)
+	 * @see Biblioteca.DatabaseInterface#listaExemplaresDisponiveisPorCategoria(java.lang.String)
+	 */
+	@Override
+	public ArrayList<ExemplarOnline> listaExemplaresOnlineDisponiveisPorCategoria(String nome) throws DatabaseInoperanteException{
+		try {
+			PreparedStatement st = conec.prepareStatement("SELECT nomet,nomeau,idau,nomeed,ided,idtitulo,link FROM Titulo JOIN autor ON(autor=idau) JOIN editora ON (ided=editora) JOIN exemplarOnline ON (livro = idtitulo) JOIN categoriaportitulo ON (idtitulo = categoriaportitulo.livro) JOIN categoria ON (categoriaportitulo.categoria =idca) WHERE nomeca LIKE ?;");
+			st.setString(1,"%"+ nome+"%");
+			ResultSet rs = null;
+			rs = st.executeQuery();
+			ArrayList<ExemplarOnline> lista = new ArrayList<>();
+			while (rs.next())
+			{
+				lista.add(new ExemplarOnline(rs.getString(1), new Autor(rs.getString(2),rs.getInt(3)),new Editora(rs.getString(4),rs.getInt(5)),rs.getInt(6),rs.getString(7)));
+
+			}
+			return lista;
+		} catch (SQLException e) {
+			throw new DatabaseInoperanteException("Erro na database");
+		}
+	}
+	
 	 /**
 	  * Adiciona o livro à tabela AluguelAtivo da base de dados. É usada para o registro de novos alugueis de usuario no sistema.
 	  * @param idUser  id do Usuario.

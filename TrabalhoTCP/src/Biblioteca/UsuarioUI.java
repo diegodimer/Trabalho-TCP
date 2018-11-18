@@ -1,6 +1,7 @@
 package Biblioteca;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -24,6 +25,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.ImageIcon;
 
 @SuppressWarnings("serial")
 public class UsuarioUI extends JFrame implements ActionListener, UsuarioInterface {
@@ -61,16 +63,17 @@ public class UsuarioUI extends JFrame implements ActionListener, UsuarioInterfac
 
 	private JComboBox<String> seletorTipoDeLivro;
 	private HashMap<Integer, String> listaDeLinksLivrosBuscados;
+	private JLabel imgSteve;
 	/**
 	  * Construtor para fazer o display do menu de usuario
-	  * @param user objeto da classe Usuario
-	  * @param database objeto da classe DatabaseInterface
+	  * @param user objeto da classe Usuario, todos usuários abrem essa tela (adm ou nao)
 	  */
-	public UsuarioUI(Usuario user, DatabaseInterface dataBase) {
+	public UsuarioUI(Usuario user) {
+		
 		setIconImage(Toolkit.getDefaultToolkit().getImage(UsuarioUI.class.getResource("/Biblioteca/Imagens/icone.png")));
 		setResizable(false);
 		setTitle("Interface do Usuario");
-		this.dataBase = dataBase;
+		this.dataBase = new Database();
 		this.user = user;
 
 		try {
@@ -85,6 +88,13 @@ public class UsuarioUI extends JFrame implements ActionListener, UsuarioInterfac
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		
+		imgSteve = new JLabel("");
+		imgSteve.setVerticalAlignment(SwingConstants.TOP);
+		imgSteve.setHorizontalAlignment(SwingConstants.CENTER);
+		imgSteve.setIcon(new ImageIcon(UsuarioUI.class.getResource("/Biblioteca/Imagens/cara_do_minecraft_com_um_livro.png")));
+		imgSteve.setBounds(454, 156, 119, 83);
+		contentPane.add(imgSteve);
 
 		scrollAlugueisAtivos = new JScrollPane();
 		scrollAlugueisAtivos.setBounds(27, 250, 493, 118);
@@ -218,12 +228,13 @@ public class UsuarioUI extends JFrame implements ActionListener, UsuarioInterfac
 				else if(rdbtnEditora.isSelected()) {
 					try {
 						if(seletorTipoDeLivro.getSelectedIndex() == 0) {
-							ArrayList<ExemplarFisico> resultadoBusca = dataBase.listaExemplaresDisponiveis(conteudoBuscado.getText());
+							ArrayList<ExemplarFisico> resultadoBusca = dataBase.listaExemplaresDisponiveisPorEditora(conteudoBuscado.getText());
 							listaResultadoBuscaFisico(resultadoBusca);
 						}
 						else // quer lisar livros Online
 						{
-							//	ArrayList<ExemplarOnline> resultadoBusca;
+							ArrayList<ExemplarOnline> resultadoBusca = dataBase.listaExemplarOnlinePorEditora(conteudoBuscado.getText());
+							listaResultadoBuscaOnline(resultadoBusca);
 						}
 					} catch (DatabaseInoperanteException e1) {
 						JOptionPane.showMessageDialog(null, e1.getMessage());
@@ -237,7 +248,8 @@ public class UsuarioUI extends JFrame implements ActionListener, UsuarioInterfac
 						}
 						else // quer lisar livros Online
 						{
-							//	ArrayList<ExemplarOnline> resultadoBusca;
+							ArrayList<ExemplarOnline> resultadoBusca = dataBase.listaExemplaresOnlineDisponiveisPorCategoria(conteudoBuscado.getText());
+							listaResultadoBuscaOnline(resultadoBusca);
 						}
 					} catch (DatabaseInoperanteException e1) {
 						JOptionPane.showMessageDialog(null, e1.getMessage());
@@ -252,7 +264,8 @@ public class UsuarioUI extends JFrame implements ActionListener, UsuarioInterfac
 						}
 						else // quer lisar livros Online
 						{
-							//	ArrayList<ExemplarOnline> resultadoBusca;
+							ArrayList<ExemplarOnline> resultadoBusca = dataBase.listaExemplarOnlinePorAutor(conteudoBuscado.getText());
+							listaResultadoBuscaOnline(resultadoBusca);
 						}
 					} catch (DatabaseInoperanteException e1) {
 						JOptionPane.showMessageDialog(null, e1.getMessage());

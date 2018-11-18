@@ -72,4 +72,11 @@ public interface DatabaseInterface {
 
 	ArrayList<ExemplarAlugado> listaExemplaresDevolvidos(int userID);
 
+	ArrayList<ExemplarOnline> listaExemplarOnlinePorAutor(String nome) throws DatabaseInoperanteException;
+
+	ArrayList<ExemplarOnline> listaExemplarOnlinePorEditora(String nome) throws DatabaseInoperanteException;
+
+	ArrayList<ExemplarOnline> listaExemplaresOnlineDisponiveisPorCategoria(String nome)
+			throws DatabaseInoperanteException;
+
 }

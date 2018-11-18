@@ -48,7 +48,7 @@ public class Categoria {
 	}
 	/**
 	  * Setter para o nome da categoria
-	  * @return nome nome da categoria
+	  * @param nome nome da categoria
 	  */
 	public void setNome(String nome) {
 		this.nome = nome;
