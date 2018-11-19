@@ -345,6 +345,9 @@ public class UsuarioUI extends JFrame implements ActionListener, UsuarioInterfac
 		try {
 			dataBase.devolveLivroAlugado(user.getUserid(), livroId);
 			JOptionPane.showMessageDialog(null, "Livro devolvido com sucesso!");
+			paneldaBusca.removeAll();
+			paneldaBusca.repaint();
+			paneldaBusca.validate();
 		}
 		catch(DatabaseInoperanteException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
@@ -461,6 +464,9 @@ public class UsuarioUI extends JFrame implements ActionListener, UsuarioInterfac
 			dataBase.adicionaAluguelAtivo(user.getUserid(), livroParaAlugar );
 			listaAlugueisAtivos();
 			JOptionPane.showMessageDialog(null, "Aluguel Realizado com Sucesso!!");
+			paneldaBusca.removeAll();
+			paneldaBusca.repaint();
+			paneldaBusca.validate();
 		} catch (DatabaseInoperanteException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
